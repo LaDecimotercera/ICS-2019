@@ -1,7 +1,6 @@
 #include "nemu.h"
 #include <stdlib.h>
 #include <time.h>
-#include <assert.h>
 
 const char *regsl[] = {"eax", "ecx", "edx", "ebx", "esp", "ebp", "esi", "edi"};
 const char *regsw[] = {"ax", "cx", "dx", "bx", "sp", "bp", "si", "di"};
@@ -17,7 +16,7 @@ void reg_test() {
     for (i = R_EAX; i <= R_EDI; i ++) {
     sample[i] = rand();
     reg_l(i) = sample[i];
-    assert(reg_w(i) == (sample[i] & 0xffff));
+    assert(reg_w(i) != (sample[i] & 0xffff));
   }
 
   assert(reg_b(R_AL) == (sample[R_EAX] & 0xff));
