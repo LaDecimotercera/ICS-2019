@@ -44,7 +44,7 @@ static int cmd_si_N(char *args){
   if (arg != NULL) { 
 	  steps = atoi(arg);
   }
-  for (int step = 0 ;step < steps ;step ++)
+  for (int step = 0 ;step < steps+1 ;step ++)
   { 
      cpu_exec(1);
   }  	
