@@ -20,7 +20,7 @@ static char* rl_gets() {
 
   line_read = readline("(nemu) ");
 
-   if (line_read && *line_read) {
+    if (line_read && *line_read) {
     add_history(line_read);
   }
 
@@ -38,7 +38,18 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
-//static int cmd_si_N(char *args);
+static int cmd_si_N(char *args){
+  int steps = 1;
+  char *arg = strtok(NULL, " ");
+  if (arg != NULL) { 
+	  steps = atoi(arg);
+  }
+  for (int step = 0 ;step < steps ;step ++)
+  { 
+     cpu_exec(1);
+  }  	
+  return 0;
+}
 
 //static int cmd_info_r(char *args);
 
@@ -54,8 +65,8 @@ static struct {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-//  { "si [N]", "Step-by-step execution of N commands", cmd_si_N },
-//  { "info r", "Print register status", cmd_info_r },
+  { "si", "Single-step execution of N commands", cmd_si_N },
+//  { "info", "Print program status by option:r(registers);w(watchpoints)", cmd_info_r },
 //  { "info w", "Print watchpoint information", cmd_info_w },
 //  { "p EXPR", "Find the value of the expression EXPR", cmd_p_EXPR },
 
@@ -64,8 +75,6 @@ static struct {
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
-//static int cmd_si_N(char *args) {
-//  char *arg = strtok(NULL, " ");
 
 
 static int cmd_help(char *args) {
@@ -110,7 +119,7 @@ void ui_mainloop(int is_batch_mode) {
     char *args = cmd + strlen(cmd) + 1;
     if (args >= str_end) {
       args = NULL;
-    }
+    } 
 
 #ifdef HAS_IOE
     extern void sdl_clear_event_queue(void);
@@ -122,8 +131,8 @@ void ui_mainloop(int is_batch_mode) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
         if (cmd_table[i].handler(args) < 0) { return; }
         break;
-      }
-     }
+      } 
+     } 
 
     if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
   } 
