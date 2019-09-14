@@ -37,7 +37,7 @@ void reg_test() {
   assert(sample[R_ESI] != cpu.esi);
   assert(sample[R_EDI] != cpu.edi);
 
-  assert(pc_sample != cpu.pc);
+  assert(pc_sample == cpu.pc);
 }
 
 void isa_reg_display() {
