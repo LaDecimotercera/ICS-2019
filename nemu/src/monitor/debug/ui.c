@@ -64,7 +64,7 @@ static int cmd_x_N_EXPR(char *args) {// PA1.1: simplified version
   unsigned int addr, byte, bytes_length;
   sscanf(args, "%d 0x%x", &bytes_length, &addr);
   for (byte = 0 ;byte < bytes_length ;byte ++) {
-	 printf("\n0x%08x ", addr + byte*16 );
+	 printf("0x%08x\n ", addr + byte*16 );
   }
   return 0;
 }	
