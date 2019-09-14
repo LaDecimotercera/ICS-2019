@@ -16,11 +16,11 @@ static char* rl_gets() {
   if (line_read) {
     free(line_read);
     line_read = NULL;
-  }
+   }
 
   line_read = readline("(nemu) ");
 
-  if (line_read && *line_read) {
+   if (line_read && *line_read) {
     add_history(line_read);
   }
 
@@ -38,6 +38,14 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+//static int cmd_si_N(char *args);
+
+//static int cmd_info_r(char *args);
+
+//static int cmd_info_w(char *args);
+
+//static int cmd_p_EXPR(char *args);
+
 static struct {
   char *name;
   char *description;
@@ -46,6 +54,10 @@ static struct {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
+//  { "si [N]", "Step-by-step execution of N commands", cmd_si_N },
+//  { "info r", "Print register status", cmd_info_r },
+//  { "info w", "Print watchpoint information", cmd_info_w },
+//  { "p EXPR", "Find the value of the expression EXPR", cmd_p_EXPR },
 
   /* TODO: Add more commands */
 
@@ -62,22 +74,22 @@ static int cmd_help(char *args) {
     /* no argument given */
     for (i = 0; i < NR_CMD; i ++) {
       printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
-    }
-  }
+     }
+   }
   else {
-    for (i = 0; i < NR_CMD; i ++) {
-      if (strcmp(arg, cmd_table[i].name) == 0) {
+     for (i = 0; i < NR_CMD; i ++) {
+       if (strcmp(arg, cmd_table[i].name) == 0) {
         printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
         return 0;
       }
     }
     printf("Unknown command '%s'\n", arg);
-  }
+  } 
   return 0;
 }
 
 void ui_mainloop(int is_batch_mode) {
-  if (is_batch_mode) {
+  if ( is_batch_mode) {
     cmd_c(NULL);
     return;
   }
@@ -108,8 +120,8 @@ void ui_mainloop(int is_batch_mode) {
         if (cmd_table[i].handler(args) < 0) { return; }
         break;
       }
-    }
+     }
 
     if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
-  }
+  } 
 }
