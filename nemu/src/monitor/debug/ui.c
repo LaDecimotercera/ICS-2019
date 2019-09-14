@@ -13,14 +13,14 @@ void cpu_exec(uint64_t);
 static char* rl_gets() {
   static char *line_read = NULL;
 
-  if (line_read) {
+   if (line_read) {
     free(line_read);
     line_read = NULL;
    }
 
   line_read = readline("(nemu) ");
 
-    if (line_read && *line_read) {
+     if (line_read && *line_read) {
     add_history(line_read);
   }
 
@@ -43,18 +43,24 @@ static int cmd_si_N(char *args){
   char *arg = strtok(NULL, " ");
   if (arg != NULL) { 
 	  steps = atoi(arg);
-  }
-  for (int step = 0 ;step < steps ;step ++)
-  { 
+  } 
+  for (int step = 0 ;step < steps ;step ++){ 
      cpu_exec(1);
-  }  	
+  }  	 
   return 0;
 }
 
-//static int cmd_info_r(char *args);
+extern void isa_reg_display(void); 
 
-//static int cmd_info_w(char *args);
-
+static int cmd_info (char *args){
+  char *arg = strtok(NULL, " ");
+  char *str_r = "r";
+  if (strcmp(arg,str_r)==0) { isa_reg_display();} 
+//  else if (arg == 'w'）{ 
+//  }	  
+  else { printf("Unknown command '%s'\n", args);}//mighty problem
+  return 0;
+}
 //static int cmd_p_EXPR(char *args);
 
 static struct {
@@ -66,8 +72,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "Single-step execution of N commands", cmd_si_N },
-//  { "info", "Print program status by option:r(registers);w(watchpoints)", cmd_info_r },
-//  { "info w", "Print watchpoint information", cmd_info_w },
+  { "info", "Print program status by option: r(registers); w(watchpoints)", cmd_info },
 //  { "p EXPR", "Find the value of the expression EXPR", cmd_p_EXPR },
 
   /* TODO: Add more commands */
@@ -86,8 +91,8 @@ static int cmd_help(char *args) {
     /* no argument given */
     for (i = 0; i < NR_CMD; i ++) {
       printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
-     }
-   }
+      }
+   } 
   else {
      for (i = 0; i < NR_CMD; i ++) {
        if (strcmp(arg, cmd_table[i].name) == 0) {

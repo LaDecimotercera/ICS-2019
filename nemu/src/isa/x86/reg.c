@@ -13,7 +13,7 @@ void reg_test() {
   cpu.pc = pc_sample;
 
   int i;
-     for (i = R_EAX; i <= R_EDI; i ++) {
+  for (i = R_EAX; i <= R_EDI; i ++) {
     sample[i] = rand();
     reg_l(i) = sample[i];
     assert(reg_w(i) == (sample[i] & 0xffff));
@@ -40,7 +40,15 @@ void reg_test() {
   assert(pc_sample == cpu.pc);
 }
 
-void isa_reg_display() {
+void isa_reg_display(void) {
+  printf("eax 0x%08x\n",cpu.eax);
+  printf("ecx 0x%08x\n",cpu.ecx);
+  printf("edx 0x%08x\n",cpu.edx);
+  printf("ebx 0x%08x\n",cpu.ebx);
+  printf("esp 0x%08x\n",cpu.esp);
+  printf("ebp 0x%08x\n",cpu.ebp);
+  printf("esi 0x%08x\n",cpu.esi);
+  printf("edi 0x%08x\n",cpu.edi);  
 }
 
 uint32_t isa_reg_str2val(const char *s, bool *success) {
