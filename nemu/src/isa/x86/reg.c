@@ -13,10 +13,10 @@ void reg_test() {
   cpu.pc = pc_sample;
 
   int i;
-   for (i = R_EAX; i <= R_EDI; i ++) {
+    for (i = R_EAX; i <= R_EDI; i ++) {
     sample[i] = rand();
     reg_l(i) = sample[i];
-    assert(reg_w(i) == (sample[i] & 0xff));
+    assert(reg_w(i) == (sample[i] & 0xffff));
   }
 
   assert(reg_b(R_AL) == (sample[R_EAX] & 0xff));
