@@ -64,6 +64,9 @@ static struct {
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
+//static int cmd_si_N(char *args) {
+//  char *arg = strtok(NULL, " ");
+
 
 static int cmd_help(char *args) {
   /* extract the first argument */
