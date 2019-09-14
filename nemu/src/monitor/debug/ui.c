@@ -36,15 +36,11 @@ static int cmd_q(char *args) {
   return -1;
 }
 
-static int cmd_help(char *args);
-
-static int cmd_si_N(char *args){
+static int cmd_si_N(char *args) {//single-step execution of N operations
   int steps = 1;
   char *arg = strtok(NULL, " ");
-  if (arg != NULL) { 
-	  steps = atoi(arg);
-  } 
-  for (int step = 0 ;step < steps ;step ++){ 
+  if (arg != NULL) { steps = atoi(arg); } 
+  for (int step = 0 ;step < steps ;step ++) { 
      cpu_exec(1);
   }  	 
   return 0;
@@ -52,7 +48,7 @@ static int cmd_si_N(char *args){
 
 extern void isa_reg_display(void); 
 
-static int cmd_info (char *args){
+static int cmd_info (char *args) {
   char *arg = strtok(NULL, " ");
   char *str_r = "r";
   if (strcmp(arg,str_r)==0) { isa_reg_display();} 
@@ -60,8 +56,20 @@ static int cmd_info (char *args){
 //  }	  
   else { printf("Unknown command '%s'\n", args);}//mighty problem
   return 0;
-}
+} 
+
 //static int cmd_p_EXPR(char *args);
+
+static int cmd_x_N_EXPR(char *args) {// PA1.1: simplified version
+  unsigned int addr, byte, bytes_length;
+  sscanf(args, "%d 0x%x", &bytes_length, &addr);
+  for (byte = 0 ;byte < bytes_length ;byte ++) {
+	printf("0x%08x\n ", addr + byte*16 );
+  }
+  return 0;
+}	
+
+static int cmd_help(char *args);   
 
 static struct {
   char *name;
@@ -71,8 +79,9 @@ static struct {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-  { "si", "Single-step execution of N commands", cmd_si_N },
+  { "si N", "Single-step execution of N commands", cmd_si_N },
   { "info", "Print program status by option: r(registers); w(watchpoints)", cmd_info },
+  { "x N EXPR", "Scan memory", cmd_x_N_EXPR },
 //  { "p EXPR", "Find the value of the expression EXPR", cmd_p_EXPR },
 
   /* TODO: Add more commands */
