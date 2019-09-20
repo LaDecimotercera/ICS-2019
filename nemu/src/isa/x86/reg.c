@@ -42,7 +42,7 @@ void reg_test() {
 
 void isa_reg_display(void) {
 //for(int cnt = 0; cnt < 8; cnt++)
-//   printf("%s: ")	
+//   printf("%s:\t")	
   printf("eax 0x%08x\n",cpu.eax);
   printf("ecx 0x%08x\n",cpu.ecx);
   printf("edx 0x%08x\n",cpu.edx);
