@@ -67,9 +67,9 @@ static int cmd_x_N_EXPR(char *args) {// PA1.1: simplified version
   sscanf(arg,"%d",&len);
   char *arg_ = strtok(NULL, " ");
   sscanf(arg_,"%x",&start_addr);
-  for (int i = 0; i <  len; ++i) {
-	printf("%#x:\t",start_addr);
-	printf("%#x\t",vaddr_read(start_addr , 4));
+  printf("%#x:\t",start_addr);
+  for (int i = 0; i <  len; i ++) {
+	printf("%#x\t",vaddr_read(start_addr,4));
 	start_addr += 4;
    }
   return 0;
