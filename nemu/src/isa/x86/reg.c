@@ -41,8 +41,13 @@ void reg_test() {
 }
 
 void isa_reg_display(void) {
-for(int cnt = 0; cnt < 8; cnt++)
-   printf("%s:\t0x%08x\n", regsl[cnt],cpu.gpr[cnt]._32);
+for (int idx = 0; idx < 8; idx ++)
+	printf("%s:\t0x%08x\n", regsl[idx],cpu.gpr[idx]._32);
+for (int idx = 0; idx < 8; idx ++)
+	printf("%s:\t0x%08x\n", regsw[idx],cpu.gpr[idx]._16);
+for (int idx = 0; idx < 8; idx ++)
+	for (int idx_2 = 0; idx_2 < 2; idx_2 ++)
+		printf("%s:\t0x%08x\n", regsb[idx],cpu.gpr[idx]._8[idx_2]);
 
  /* printf("eax 0x%08x\n",cpu.eax);
   printf("ecx 0x%08x\n",cpu.ecx);
