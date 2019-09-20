@@ -72,6 +72,7 @@ static int cmd_x_N_EXPR(char *args) {// PA1.1: simplified version
 	printf("%#x\t",vaddr_read(start_addr,4));
 	start_addr += 4;
    }
+  printf("\n");
   return 0;
 }	
 
