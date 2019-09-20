@@ -98,7 +98,7 @@ static struct {
   { "si", "Single-step execution of N commands", cmd_si_N },
   { "info", "Print program status by option: r(registers); w(watchpoints)", cmd_info },
   { "x", "Scan memory", cmd_x_N_EXPR },
-  { "p EXPR", "Find the value of the expression EXPR", cmd_p_EXPR },
+  { "p", "Find the value of the expression EXPR", cmd_p_EXPR },
 
   /* TODO: Add more commands */
 
