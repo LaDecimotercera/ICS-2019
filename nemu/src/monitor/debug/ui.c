@@ -59,7 +59,16 @@ static int cmd_info (char *args) {
   return 0;
 } 
 
-//static int cmd_p_EXPR(char *args);
+static int cmd_p_EXPR(char *args) {
+	char *arg = strtok(NULL," ");
+	bool success = true;
+	int res = expr(arg,&success);
+	if (success)
+		printf("%#x\n",res);
+	else
+		printf("Fail to eval\n");   
+	return 0;
+}
 
 static int cmd_x_N_EXPR(char *args) {// PA1.1: simplified version
   vaddr_t start_addr; int len;
@@ -89,7 +98,7 @@ static struct {
   { "si", "Single-step execution of N commands", cmd_si_N },
   { "info", "Print program status by option: r(registers); w(watchpoints)", cmd_info },
   { "x", "Scan memory", cmd_x_N_EXPR },
-//  { "p EXPR", "Find the value of the expression EXPR", cmd_p_EXPR },
+  { "p EXPR", "Find the value of the expression EXPR", cmd_p_EXPR },
 
   /* TODO: Add more commands */
 
