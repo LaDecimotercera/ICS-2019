@@ -60,7 +60,7 @@ static int cmd_info (char *args) {
 } 
 
 static int cmd_p_EXPR(char *args) {
-	char *arg = strtok(NULL," ");
+	char *arg = strtok(NULL,"@");
 	bool success = true;
 	int res = expr(arg,&success);
 	if (success)
