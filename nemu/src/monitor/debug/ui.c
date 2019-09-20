@@ -52,8 +52,7 @@ extern void isa_reg_display(void);
 
 static int cmd_info (char *args) {
   char *arg = strtok(NULL, " ");
-  char *str_r = "r";
-  if (strcmp(arg,str_r)==0) { isa_reg_display();} 
+  if (strcmp(arg,"r")==0) { isa_reg_display();} 
 //  else if (arg == 'w'）{ 
 //  }	  
   else { printf("Unknown command '%s'\n", args);}//mighty problem
