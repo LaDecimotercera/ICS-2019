@@ -27,8 +27,8 @@ static struct rule {
   {"\\-", '-'},							// minus
   {"\\*", '*'},						    // multiply
   {"\\/", '/'},						    // divide
- // {"==", TK_EQ},						// equal
- // {"!=", TK_UNEQ},					// unequal
+  {"==", TK_EQ},						// equal
+  {"!=", TK_UNEQ},					    // unequal
   {"[0-9]+", TK_TEN},		    		// decimal number
   {"0x[0-9a-f]+", TK_SIXTEEN},          // hexadecimal number
   {"\\(", '('},                         // left_parenthesis
