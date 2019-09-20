@@ -7,6 +7,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+extern void isa_reg_display(void);
+
 void cpu_exec(uint64_t);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
@@ -48,8 +50,6 @@ static int cmd_si_N(char *args) {//single-step execution of N operations
   return 0;
 }
 
-extern void isa_reg_display(void); 
-
 static int cmd_info (char *args) {
   char *arg = strtok(NULL, " ");
   if (strcmp(arg,"r")==0) { isa_reg_display();} 
@@ -62,11 +62,16 @@ static int cmd_info (char *args) {
 //static int cmd_p_EXPR(char *args);
 
 static int cmd_x_N_EXPR(char *args) {// PA1.1: simplified version
-  unsigned int addr, byte, bytes_length;
-  sscanf(args, "%d 0x%x", &bytes_length, &addr);
-  for (byte = 0 ;byte < bytes_length ;byte ++) {
-	 printf("0x%08x\n", addr + byte*16);
-  }
+  vaddr_t start_addr; int len;
+  char *arg = strtok(NULL, " ");
+  sscanf(arg,"%d",&len);
+  char *arg_ = strtok(NULL, " ");
+  sscanf(arg_,"%x",&start_addr);
+  for (int i = 0; i <  len; len ++) {
+	printf("%#x:\t",start_addr);
+	printf("%#x\t",vaddr_read(start_addr , 4));
+	start_addr += 4;
+   }
   return 0;
 }	
 
@@ -119,9 +124,9 @@ void ui_mainloop(int is_batch_mode) {
   if ( is_batch_mode) {
     cmd_c(NULL);
     return;
-  }
+  } 
 
-  for (char *str; (str = rl_gets()) != NULL; ) {
+  for (char *str; (str = rl_gets() ) != NULL; ) {
     char *str_end = str + strlen(str);
 
     /* extract the first token as the command */
