@@ -7,7 +7,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ
+  TK_NOTYPE = 256, TK_EQ=1, TK_UNEQ=0, TK_TEN=10, TK_SIXTEEN=16, 
 
   /* TODO: Add more token types */
 
@@ -22,18 +22,20 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
-  {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
-  {"\\-", '-'},         // minus
-  {"\\*", '*'},         // multiply
-  {"\\/", '/'},         // divide
- // {"==", TK_EQ},        // equal
- // {"!=", TK_UNEQ},      // unequal
-  {"\\(", '('},         // left_parenthesis
-  {"\\)", ')'},         // right_parenthesis
+  {" +", TK_NOTYPE},				    // spaces
+  {"\\+", '+'},						    // plus
+  {"\\-", '-'},							// minus
+  {"\\*", '*'},						    // multiply
+  {"\\/", '/'},						    // divide
+ // {"==", TK_EQ},						// equal
+ // {"!=", TK_UNEQ},					// unequal
+  {"[0-9]+", TK_TEN},		    		// decimal number
+  {"0x[0-9a-f]+", TK_SIXTEEN},          // hexadecimal number
+  {"\\(", '('},                         // left_parenthesis
+  {"\\)", ')'},							// right_parenthesis
 };
 
-#define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
+#define NR_REGEX (sizeof(rules) / sizeof(rules[0]))
 
 static regex_t re[NR_REGEX] = {};
 
