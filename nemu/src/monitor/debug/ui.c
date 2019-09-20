@@ -41,7 +41,10 @@ static int cmd_si_N(char *args) {//single-step execution of N operations
   char *arg = strtok(NULL, " ");
   if (arg) steps = atoi(arg);
   if (steps<=0) cpu_exec(-1);
-  else cpu_exec(steps);
+  else {
+	 for (int step = 0; step < steps; step ++)
+	  cpu_exec(1);
+  }
   return 0;
 }
 
