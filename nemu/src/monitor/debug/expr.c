@@ -205,7 +205,8 @@ uint32_t eval(int p, int q) {
 	else return false;
   }
   else if (check_parentheses(p,q) == true) {			
-	return eval(p + 1, q - 1);
+	  printf("Yes!\n");
+	  return eval(p + 1, q - 1);
   }
   else {
 	op = find_dominant_op(p,q);	
