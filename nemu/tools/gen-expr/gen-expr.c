@@ -7,8 +7,32 @@
 
 // this should be enough
 static char buf[65536];
+buf[] = '\0';
+static uint32_t choose(uint32_t n) {
+  srand(time(NULL));
+  return rand()%2;
+}
+
+static inline char gen_rand_op() {
+  char op[]={'+','-','*','/'};
+  srand(time(NULL));
+  int i = rand()%3;
+  return op[i];
+}
+ 
 static inline void gen_rand_expr() {
-  buf[0] = '\0';
+  switch (choose(3)) {
+    case 0: {
+		strcat(buf,choose(100));} break;
+    case 1: {
+	    strcat(buf,"("); 
+	    gen_rand_expr();
+		strcat(buf,")");} break;
+    default:{
+		gen_rand_expr();
+		strcat(buf,gen_rand_op);
+		gen_rand_expr();}break;
+  }
 }
 
 static char code_buf[65536];
