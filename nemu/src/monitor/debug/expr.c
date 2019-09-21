@@ -174,8 +174,8 @@ bool check_parentheses(int p, int q) {
 
 uint32_t find_dominant_op(int p, int q) {	
   int match = 0;
-  int op = p+1;
-  for (int i = p+1; i<q ; i ++) {
+  int op = p;
+  for (int i = p; i<q ; i ++) {
 	if (tokens[i].type=='(')
 		match ++;
 	else if (tokens[i].type == ')')
@@ -193,7 +193,7 @@ uint32_t find_dominant_op(int p, int q) {
 }
 
 uint32_t eval(int p, int q) {
-//  int op, val1, val2;  
+  int op, val1, val2;  
   if (p > q)
 	return false;
   else if (p == q) {
@@ -208,7 +208,6 @@ uint32_t eval(int p, int q) {
 	return eval(p + 1, q - 1);
   }
   else {
-    int op, val1, val2;  
 	op = find_dominant_op(p,q);	
 	val1 = eval(p, op - 1);
 	val2 = eval(op + 1, q);
