@@ -157,7 +157,6 @@ bool check_parentheses(int p, int q) {
   int match = 0; 
   if (tokens[p].type!='('||tokens[p].type!=')')
 	return false;
-  p++;
   for (;p < q; p ++) {
 	if (tokens[p].type == '(')
 		match ++;
@@ -168,9 +167,10 @@ bool check_parentheses(int p, int q) {
 	else if (match == 0)
 		return false;
 	}
-  if (match == 0)
+  if (match == 1)
 	return true;
-  return false;	
+  else
+	return false;	
 }
 
 uint32_t find_dominant_op(int p, int q) {	
