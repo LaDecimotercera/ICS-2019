@@ -7,7 +7,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ=1, TK_UNEQ=0, TK_TEN=10, TK_SIXTEEN=16, 
+  TK_NOTYPE = 256, TK_EQ = 1, TK_UNEQ = 0, TK_TEN = 10, TK_SIXTEEN = 16, 
 
   /* TODO: Add more token types */
 
@@ -30,7 +30,6 @@ static struct rule {
   {"==", TK_EQ},						// equal
   {"!=", TK_UNEQ},					    // unequal
   {"[0-9]+", TK_TEN},		    		// decimal number
-  {"0x[0-9a-f]+", TK_SIXTEEN},          // hexadecimal number
   {"\\(", '('},                         // left_parenthesis
   {"\\)", ')'},							// right_parenthesis
 };
@@ -148,10 +147,79 @@ static bool make_token(char *e) {
     if (i == NR_REGEX) {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
       return false;
-     }
+     } 
   } 
 
   return true;
+}
+
+bool check_parentheses(int p, int q) {
+  int match = 0; 
+  if (tokens[p].type!='('||tokens[p].type!=')')
+	return false;
+  for (;p < q; p ++) {
+	if (tokens[p].type == '(')
+		match ++;
+	else if (tokens[p].type == ')')
+		match --;
+	if (match < 0)
+		assert(0);
+	else if (match == 0)
+		return false;
+	}
+  if (match == 1)
+	return true;
+  return false;	
+}
+
+uint32_t find_dominant_op(int p, int q) {	
+  int match = 0;
+  int op = p+1;
+  for (int i = p+1; i<q ; i ++) {
+	if (tokens[i].type=='(')
+		match ++;
+	else if (tokens[i].type == ')')
+		match --;
+	else if (match == 0) {
+		if (tokens[i].type == '+'||tokens[i].type == '-')
+			op = i;
+		else if (tokens[i].type == '*'||tokens[i].type == '/') {
+			if(tokens[op].type != '+'&&tokens[op].type != '-')
+				op=i;
+		}
+	}
+  }
+  return op;
+}
+
+uint32_t eval(int p, int q) {
+  int op, val1, val2;  
+  if (p > q)
+	return false;
+  else if (p == q) {
+	int res = 0;
+	if (tokens[p].type == TK_TEN) {
+		sscanf(tokens[p].str,"%d",&res);
+		return res;
+	}
+	else assert(0);
+  }
+  else if (check_parentheses(p,q) == true) {			
+	return eval(p + 1, q - 1);
+  }
+  else {
+	op = find_dominant_op(p,q);	
+	val1 = eval(p, op - 1);
+	val2 = eval(op + 1, q);
+
+	switch (tokens[op].type) {
+		case '+': return val1 + val2;
+		case '-': return val1 - val2;
+		case '*': return val1 * val2;
+		case '/': return val1 / val2;
+		default: assert(0);
+	}
+  }
 }
 
 uint32_t expr(char *e, bool *success) {
@@ -161,7 +229,8 @@ uint32_t expr(char *e, bool *success) {
   } 
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
-
+  int p = 0;
+  int q = nr_token - 1;
+  return eval(p,q);
   return 0;
 }
