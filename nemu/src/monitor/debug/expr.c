@@ -193,7 +193,7 @@ uint32_t find_dominant_op(int p, int q) {
 }
 
 uint32_t eval(int p, int q) {
-  int op, val1, val2;  
+//  int op, val1, val2;  
   if (p > q)
 	return false;
   else if (p == q) {
@@ -208,6 +208,7 @@ uint32_t eval(int p, int q) {
 	return eval(p + 1, q - 1);
   }
   else {
+    int op, val1, val2;  
 	op = find_dominant_op(p,q);	
 	val1 = eval(p, op - 1);
 	val2 = eval(op + 1, q);
