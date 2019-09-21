@@ -64,7 +64,7 @@ static int cmd_p_EXPR(char *args) {
 	bool success = true;
 	int res = expr(arg, &success);
 	if (success)
-		printf("%#x\n",res);
+		printf("%d\n",res);
 	else
 		printf("Fail to eval\n");   
 	return 0;
