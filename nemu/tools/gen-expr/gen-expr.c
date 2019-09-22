@@ -68,9 +68,10 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0;  i < loop; i ++) {
-    while (strlen(buf)>30)
-		memset(buf,'\0',sizeof(buf));
-		gen_rand_expr();
+	gen_rand_expr();
+//	while (strlen(buf)>30)
+//		memset(buf,'\0',sizeof(buf));
+//		gen_rand_expr();
 	
     sprintf(code_buf, code_format, buf);
 
