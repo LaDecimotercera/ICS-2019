@@ -90,51 +90,61 @@ static bool make_token(char *e) {
         switch (rules[i].token_type) {
 			case '+':{
 				tokens[nr_token].type = rules[i].token_type;
+			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
 			    strncpy(tokens[nr_token].str, substr_start, substr_len);
-	    	    nr_token ++;
+				nr_token ++;
 		    }break;  
 			case '-':{   
 				tokens[nr_token].type = rules[i].token_type;
+			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
 			    strncpy(tokens[nr_token].str, substr_start, substr_len);
 	    	    nr_token ++;
 			}break;
 			case '*':{   
 				tokens[nr_token].type = rules[i].token_type;
+			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
 			    strncpy(tokens[nr_token].str, substr_start, substr_len);
 	    	    nr_token ++;
 			}break;
 			case '/':{   
 				tokens[nr_token].type = rules[i].token_type;
+			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
 			    strncpy(tokens[nr_token].str, substr_start, substr_len);
 	    	    nr_token ++;
 			}break;
 			case TK_EQ:{   
 				tokens[nr_token].type = rules[i].token_type;
+			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
 			    strncpy(tokens[nr_token].str, substr_start, substr_len);
 	    	    nr_token ++;
 			}break;
 			case TK_UNEQ:{  
 				tokens[nr_token].type = rules[i].token_type;
+			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
 			    strncpy(tokens[nr_token].str, substr_start, substr_len);
 	    	    nr_token ++;
 			}break;
 			case TK_TEN:{  
 				tokens[nr_token].type = rules[i].token_type;
-			    strncpy(tokens[nr_token].str, substr_start, substr_len);
+			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
+			   	strncpy(tokens[nr_token].str, substr_start, substr_len);
 	    	    nr_token ++;
 			}break;
 			case TK_SIXTEEN:{  
 				tokens[nr_token].type = rules[i].token_type;
+			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
 			    strncpy(tokens[nr_token].str, substr_start, substr_len);
 	    	    nr_token ++;
 			}break;
 			case '(':{  
 				tokens[nr_token].type = rules[i].token_type;
+			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
 			    strncpy(tokens[nr_token].str, substr_start, substr_len);
 	    	    nr_token ++;
 			}break;
 			case ')':{   
 				tokens[nr_token].type = rules[i].token_type;
+			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
 			    strncpy(tokens[nr_token].str, substr_start, substr_len);
 	    	    nr_token ++;
 			}break;
@@ -142,7 +152,7 @@ static bool make_token(char *e) {
          }
         break;
       }
-    } 
+    }
 
     if (i == NR_REGEX) {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
@@ -221,7 +231,6 @@ uint32_t eval(int p, int q) {
 		default: assert(0);
 	}
   }
-  return 0;
 }
 
 uint32_t expr(char *e, bool *success) {
@@ -234,5 +243,5 @@ uint32_t expr(char *e, bool *success) {
   int p = 0;
   int q = nr_token - 1;
   return eval(p,q);
-  return 0;
+//  return 0;
 }
