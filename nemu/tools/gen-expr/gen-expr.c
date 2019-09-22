@@ -37,8 +37,6 @@ static inline void gen_num() {
 
  
 static inline void gen_rand_expr() {
-//     if (strlen(buf)>=30)
-//		 return;
 	 switch (choose(3)) {
 	 case 0: {gen_num();} break;
      case 1: {
@@ -50,8 +48,6 @@ static inline void gen_rand_expr() {
 		gen_rand_op();
 		gen_rand_expr();} break;
   }
-	 if(strlen(buf)>30)
-		 return;
 }
 
 static char code_buf[65536];
@@ -72,8 +68,10 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0;  i < loop; i ++) {
-    gen_rand_expr();
-
+    while (strlen(buf)>30)
+		memset(buf,'\0',sizeof(buf));
+		gen_rand_expr();
+	
     sprintf(code_buf, code_format, buf);
 
     FILE *fp = fopen("/tmp/.code.c", "w");
