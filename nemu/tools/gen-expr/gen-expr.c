@@ -6,33 +6,52 @@
 #include <string.h>
 
 // this should be enough
-static char buf[65536];
-buf[] = '\0';
-static uint32_t choose(uint32_t n) {
-  srand(time(NULL));
-  return rand()%2;
+static char buf[65536]="";
+//buf[] = '\0';
+static inline uint32_t choose(uint32_t n) {
+ // srand(time(NULL));
+  return rand()%n;
 }
 
-static inline char gen_rand_op() {
-  char op[]={'+','-','*','/'};
-  srand(time(NULL));
-  int i = rand()%3;
-  return op[i];
+static inline void gen_rand_op() {
+ // srand(time(NULL));
+  char op;
+  int i = rand()%4;
+  switch(i) {
+	case 0: strcat(buf,"+");break;
+	case 1: strcat(buf,"-");break;
+	case 2: strcat(buf,"*");break;
+	case 3: strcat(buf,"/");break;
+  }
 }
+
+static inline void gen_num() {
+	char str[3];
+//	int num=choose(100);
+//	if (strcmp(buf[strlen(buf)-1],"/")==0)		
+//		while(num==0)
+//			num=choose(100);
+	sprintf(str,"%d",choose(100));
+	strcat(buf,str);
+}
+
  
 static inline void gen_rand_expr() {
-  switch (choose(3)) {
-    case 0: {
-		strcat(buf,choose(100));} break;
-    case 1: {
+//     if (strlen(buf)>=30)
+//		 return;
+	 switch (choose(3)) {
+	 case 0: {gen_num();} break;
+     case 1: {
 	    strcat(buf,"("); 
 	    gen_rand_expr();
 		strcat(buf,")");} break;
-    default:{
+	 default: {
 		gen_rand_expr();
-		strcat(buf,gen_rand_op);
-		gen_rand_expr();}break;
+		gen_rand_op();
+		gen_rand_expr();} break;
   }
+	 if(strlen(buf)>30)
+		 return;
 }
 
 static char code_buf[65536];
@@ -52,7 +71,7 @@ int main(int argc, char *argv[]) {
     sscanf(argv[1], "%d", &loop);
   }
   int i;
-  for (i = 0; i < loop; i ++) {
+  for (i = 0;  i < loop; i ++) {
     gen_rand_expr();
 
     sprintf(code_buf, code_format, buf);
@@ -73,6 +92,7 @@ int main(int argc, char *argv[]) {
     pclose(fp);
 
     printf("%u %s\n", result, buf);
-  }
+	memset(buf,'\0',sizeof(buf));
+   }
   return 0;
 }
