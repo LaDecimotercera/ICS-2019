@@ -7,7 +7,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ = 1, TK_UNEQ = 0, TK_TEN = 10, TK_SIXTEEN = 16, 
+  TK_NOTYPE = 256, TK_EQ = 1, TK_UNEQ = 0, TK_TEN = 10, TK_SIXTEEN = 16, TK_POINTER = 19,
 
   /* TODO: Add more token types */
 
@@ -30,6 +30,7 @@ static struct rule {
   {"==", TK_EQ},						// equal
   {"!=", TK_UNEQ},					    // unequal
   {"[0-9]+", TK_TEN},		    		// decimal number
+  {"0x[0-9a-f]+", TK_SIXTEEN},          // hexadecimal number
   {"\\(", '('},                         // left_parenthesis
   {"\\)", ')'},							// right_parenthesis
 };
@@ -138,10 +139,10 @@ static bool make_token(char *e) {
 			}break;
 			case '(':{  
 				tokens[nr_token].type = rules[i].token_type;
-			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
-			    strncpy(tokens[nr_token].str, substr_start, substr_len);
-	    	    nr_token ++;
-			}break;
+                memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str)); 
+				strncpy(tokens[nr_token].str, substr_start, substr_len);
+                nr_token ++;
+            }break;
 			case ')':{   
 				tokens[nr_token].type = rules[i].token_type;
 			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
@@ -213,17 +214,25 @@ uint32_t eval(int p, int q) {
 		sscanf(tokens[p].str,"%d",&res);
 		return res;
 	}
+//	else return false;
+	else if (tokens[p].type == TK_SIXTEEN) {
+		sscanf(tokens[p].str,"%x",&res);
+        return res;
+    }
 	else return false;
   }
   else if (check_parentheses(p,q) == true) {			
 	  return eval(p + 1, q - 1);
   }
   else {
-	op = find_dominant_op(p,q);	
+	op = find_dominant_op(p,q);
 	val1 = eval(p, op - 1);
-	val2 = eval(op + 1, q);
+    val2 = eval(op + 1, q); 
 
-	switch (tokens[op].type) {
+	if (tokens[p].type == '-' && op == p) return -val2;
+	if (tokens[p].type == '*' && op == p) return vaddr_read(val2,4);
+
+	switch (tokens[op].type) { 
 		case '+': return val1 + val2;
 		case '-': return val1 - val2;
 		case '*': return val1 * val2;
@@ -242,6 +251,10 @@ uint32_t expr(char *e, bool *success) {
   /* TODO: Insert codes to evaluate the expression. */
   int p = 0;
   int q = nr_token - 1;
+  for (int i = 0; i < nr_token; i ++) {
+	 if (tokens[i].type == '*' && (i == 0 || tokens[i - 1].type == '+' || tokens[i - 1].type == '-'\
+				 || tokens[i - 1].type == '*' || tokens[i - 1].type == '/'))
+		tokens[i].type = TK_POINTER ;
+  }
   return eval(p,q);
-//  return 0;
 }
