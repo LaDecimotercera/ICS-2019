@@ -85,6 +85,19 @@ static int cmd_x_N_EXPR(char *args) {// PA1.1: simplified version
   return 0;
 }	
 
+static int cmd_w_EXPR(char *args) {
+  set_watchpoint(args);
+  return 0;  
+}
+
+static int cmd_d_N(char *args) {
+  char *arg = strtok(NULL,"@");
+  int NO;
+  sscanf(arg, "%d",&NO);
+  del_watchpoint(NO);
+  return 0;
+}
+
 static int cmd_help(char *args);   
 
 static struct {
@@ -99,7 +112,8 @@ static struct {
   { "info", "Print program status by option: r(registers); w(watchpoints)", cmd_info },
   { "x", "Scan memory", cmd_x_N_EXPR },
   { "p", "Find the value of the expression EXPR", cmd_p_EXPR },
-
+  { "w", "Set watchpoint", cmd_w_EXPR },
+  { "d", "Delete watchpoint", cmd_d_N },
   /* TODO: Add more commands */
 
 };

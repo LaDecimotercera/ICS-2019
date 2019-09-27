@@ -60,6 +60,7 @@ void cpu_exec(uint64_t n) {
 
     /* TODO: check watchpoints here. */
 
+
 #endif
 
   g_nr_guest_instr ++;
