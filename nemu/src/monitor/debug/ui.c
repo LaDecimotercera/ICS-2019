@@ -53,8 +53,7 @@ static int cmd_si_N(char *args) {//single-step execution of N operations
 static int cmd_info (char *args) {
   char *arg = strtok(NULL, " ");
   if (strcmp(arg,"r")==0) { isa_reg_display();} 
-//  else if (arg == 'w'）{ 
-//  }	  
+  else if (strcmp(arg,"w")==0) {show_watchpoint();}
   else { printf("Unknown command '%s'\n", args);}//mighty problem
   return 0;
 } 
