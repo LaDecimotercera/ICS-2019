@@ -19,9 +19,8 @@ void init_wp_pool() {
 }
 
 WP* new_wp() {
-  if (point_cnt == 0) {
+  if (!point_cnt) 
 	  init_wp_pool();
-  }
   WP *p = free_;
   if (p) {
 	free_ = free_->next;
@@ -37,7 +36,7 @@ void free_wp(int NO) {
   WP *p = head;
   WP *q = p;
   if (head == NULL) {
-	printf("No watchpoint\n"); return;
+	printf("No watchpoint found!\n"); return;
   }
   if (p->NO == NO) {
 	head = head->next;
@@ -57,10 +56,9 @@ void free_wp(int NO) {
 	    point_cnt -= 1;
 		printf("Delete watchpoint %d\n", p->NO);
 	}
-	else if (p == NULL) printf("Watchpoint not found!\n");
+	else if (p == NULL) printf("No watchpoint found!\n");
   }
 }
-
 	
 /* TODO: Implement the functionality of watchpoint */
 
@@ -69,34 +67,30 @@ void set_watchpoint(char *e) {
   printf("Set watchpoint %d\n", p->NO);
   bool success = true;
   strcpy(p->tokens, e);
-  printf("Expr:%s\n", p->tokens);
+//printf("Expr:%s\n", p->tokens);
   p->Old_value = expr(p->tokens, &success);
-  if (success) printf("Old value: %x\n", p->Old_value);
-  else printf("Failed\n");
-}
-
-void del_watchpoint(int NO) {
-  free_wp(NO);
+//if (success) printf("Old value: %x\n", p->Old_value);
+//else printf("Failed\n");
 }
 
 bool check_watchpoint() {
-  WP *p = head;
-  bool success = true;
-  if (!p) {
+  WP *q = head;
+  bool success_ = true;
+  if (!q) {
 	printf("No watchpoint found!\n");
 	return false;
   }
-  while (p) { 
-    p->New_value = expr(p->tokens, &success);
-    if (success && p->New_value!=p->Old_value) {
-      printf("Trigger watchpoint %d\n", p->NO);
-      p->Old_value = p->New_value;
+  while (q) { 
+    q->New_value = expr(q->tokens, &success_);
+    if (success_ && q->New_value!=q->Old_value) {
+      printf("Trigger watchpoint %d\n", q->NO);
+      q->Old_value = q->New_value;
 	  return true; 
     }
-    else if (!success) {
-	  printf("New value eval failure in watchpoint %d\n", p->NO);
+    else if (!success_) {
+	  printf("New value eval failure in watchpoint %d\n", q->NO);
 	}
-	p = p->next;
+	q = q->next;
   }
   return false;
 }

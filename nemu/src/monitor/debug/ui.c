@@ -69,7 +69,7 @@ static int cmd_p_EXPR(char *args) {
 	return 0;
 }
 
-static int cmd_x_N_EXPR(char *args) {// PA1.1: simplified version
+static int cmd_x_N_EXPR(char *args) {
   vaddr_t start_addr; int len;
   char *arg = strtok(NULL, " ");
   sscanf(arg,"%d",&len);
@@ -77,7 +77,7 @@ static int cmd_x_N_EXPR(char *args) {// PA1.1: simplified version
   sscanf(arg_,"%x",&start_addr);
   printf("%#x:\t",start_addr);
   for (int i = 0; i <  len; i ++) {
-	printf("%#x\t",vaddr_read(start_addr,4));
+	printf("%#x\t", vaddr_read(start_addr,4));
 	start_addr += 4;
    }
   printf("\n");
@@ -86,14 +86,15 @@ static int cmd_x_N_EXPR(char *args) {// PA1.1: simplified version
 
 static int cmd_w_EXPR(char *args) {
   set_watchpoint(args);
-  return 0;  
+  return 0;
+// else return 0； 
 }
 
 static int cmd_d_N(char *args) {
   char *arg = strtok(NULL,"@");
   int NO;
   sscanf(arg, "%d",&NO);
-  del_watchpoint(NO);
+  free_wp(NO);
   return 0;
 }
 
