@@ -41,15 +41,32 @@ void reg_test() {
 }
 
 void isa_reg_display(void) {
-for (int idx = 0; idx < 8; idx ++)
+  for (int idx = 0; idx < 8; idx ++)
 	printf("%s:\t0x%08x\n", regsl[idx],cpu.gpr[idx]._32);
-for (int idx = 0; idx < 8; idx ++)
+  for (int idx = 0; idx < 8; idx ++)
 	printf("%s:\t0x%08x\n", regsw[idx],cpu.gpr[idx]._16);
-for (int idx = 0; idx < 8; idx ++)
+  for (int idx = 0; idx < 8; idx ++)
 	for (int idx_2 = 0; idx_2 < 2; idx_2 ++)
-		printf("%s:\t0x%08x\n", regsb[idx],cpu.gpr[idx]._8[idx_2]);
+	  printf("%s:\t0x%08x\n", regsb[idx],cpu.gpr[idx]._8[idx_2]);
 }
 
 uint32_t isa_reg_str2val(const char *s, bool *success) {
-  return 0;
+  int num;
+  if (strcmp(s,"pc")==0) {
+	num = cpu.pc;
+	return num;
+  }
+  else {
+	for (int j = 0; j < 8; j ++) {
+	  if (strcmp(s,regsl[j]) == 0) {
+		num = cpu.gpr[j]._32;
+		return num;
+	  }
+    }	  
+  }
+  *success = false; return 0;
 }
+
+
+
+

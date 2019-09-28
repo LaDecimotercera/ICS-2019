@@ -7,7 +7,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ = 1, TK_UNEQ = 0, TK_TEN = 10, TK_SIXTEEN = 16, TK_POINTER = 19,
+  TK_NOTYPE = 256, TK_UNEQ = 0, TK_EQ = 1, TK_DEC = 10, TK_HEX = 16, TK_POINTER = 19, TK_REG = 128, 
 
   /* TODO: Add more token types */
 
@@ -27,12 +27,13 @@ static struct rule {
   {"\\-", '-'},							// minus
   {"\\*", '*'},						    // multiply
   {"\\/", '/'},						    // divide
+  {"\\(", '('},                         // left_parenthesis
+  {"\\)", ')'},                         // right_parenthesis
   {"==", TK_EQ},						// equal
   {"!=", TK_UNEQ},					    // unequal
-  {"[0-9]+", TK_TEN},		    		// decimal number
-  {"0x[0-9a-f]+", TK_SIXTEEN},          // hexadecimal number
-  {"\\(", '('},                         // left_parenthesis
-  {"\\)", ')'},							// right_parenthesis
+  {"[0-9]+", TK_DEC},		    		// decimal numbers
+  {"0x[0-9a-f]+", TK_HEX},              // hexadecimal numbers
+  {"\\$[a-ehilpx]{2,3}", TK_REG},       // registers
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]))
@@ -89,66 +90,21 @@ static bool make_token(char *e) {
 		if (rules[i].token_type==TK_NOTYPE)
 			continue;	
         switch (rules[i].token_type) {
-			case '+':{
+			case '+':
+			case '-':
+			case '*':
+			case '/':
+			case TK_EQ:
+			case TK_UNEQ:
+			case TK_DEC:
+			case TK_HEX:
+			case TK_REG:
+			case '(':
+			case ')':{
 				tokens[nr_token].type = rules[i].token_type;
 			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
 			    strncpy(tokens[nr_token].str, substr_start, substr_len);
-				nr_token ++;
-		    }break;  
-			case '-':{   
-				tokens[nr_token].type = rules[i].token_type;
-			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
-			    strncpy(tokens[nr_token].str, substr_start, substr_len);
-	    	    nr_token ++;
-			}break;
-			case '*':{   
-				tokens[nr_token].type = rules[i].token_type;
-			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
-			    strncpy(tokens[nr_token].str, substr_start, substr_len);
-	    	    nr_token ++;
-			}break;
-			case '/':{   
-				tokens[nr_token].type = rules[i].token_type;
-			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
-			    strncpy(tokens[nr_token].str, substr_start, substr_len);
-	    	    nr_token ++;
-			}break;
-			case TK_EQ:{   
-				tokens[nr_token].type = rules[i].token_type;
-			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
-			    strncpy(tokens[nr_token].str, substr_start, substr_len);
-	    	    nr_token ++;
-			}break;
-			case TK_UNEQ:{  
-				tokens[nr_token].type = rules[i].token_type;
-			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
-			    strncpy(tokens[nr_token].str, substr_start, substr_len);
-	    	    nr_token ++;
-			}break;
-			case TK_TEN:{  
-				tokens[nr_token].type = rules[i].token_type;
-			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
-			   	strncpy(tokens[nr_token].str, substr_start, substr_len);
-	    	    nr_token ++;
-			}break;
-			case TK_SIXTEEN:{  
-				tokens[nr_token].type = rules[i].token_type;
-			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
-			    strncpy(tokens[nr_token].str, substr_start, substr_len);
-	    	    nr_token ++;
-			}break;
-			case '(':{  
-				tokens[nr_token].type = rules[i].token_type;
-                memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str)); 
-				strncpy(tokens[nr_token].str, substr_start, substr_len);
-                nr_token ++;
-            }break;
-			case ')':{   
-				tokens[nr_token].type = rules[i].token_type;
-			    memset(tokens[nr_token].str,'\0',sizeof(tokens[nr_token].str));
-			    strncpy(tokens[nr_token].str, substr_start, substr_len);
-	    	    nr_token ++;
-			}break;
+	    	    nr_token ++;} break;
 			default: assert(0);
          }
         break;
@@ -156,7 +112,7 @@ static bool make_token(char *e) {
     }
 
     if (i == NR_REGEX) {
-      printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+      printf("No match at position %d\n%s\n%*.s^\n", position, e, position, "");
       return false;
      } 
   } 
@@ -204,22 +160,27 @@ uint32_t find_dominant_op(int p, int q) {
   return op;
 }
 
+extern uint32_t isa_reg_str2val(const char *s, bool *success);
+
 uint32_t eval(int p, int q) {
   int op, val1, val2;  
   if (p > q)
 	return false;
   else if (p == q) {
 	int res = 0;
-	if (tokens[p].type == TK_TEN) {
+	if (tokens[p].type == TK_DEC) 
 		sscanf(tokens[p].str,"%d",&res);
-		return res;
-	}
-//	else return false;
-	else if (tokens[p].type == TK_SIXTEEN) {
+//		return res;
+	else if (tokens[p].type == TK_HEX)
 		sscanf(tokens[p].str,"%x",&res);
-        return res;
-    }
-	else return false;
+//      return res;
+	else if (tokens[p].type == TK_REG) {
+		bool success = true;
+		for (int i = 0; i < 4; i ++)
+			tokens[p].str[i] = tokens[p].str[i+1];  
+		res = isa_reg_str2val(tokens[p].str, &success);
+	}	
+    return res;
   }
   else if (check_parentheses(p,q) == true) {			
 	  return eval(p + 1, q - 1);
@@ -229,14 +190,17 @@ uint32_t eval(int p, int q) {
 	val1 = eval(p, op - 1);
     val2 = eval(op + 1, q); 
 
-	if (tokens[p].type == '-' && op == p) return -val2;
-	if (tokens[p].type == '*' && op == p) return vaddr_read(val2,4);
-
 	switch (tokens[op].type) { 
 		case '+': return val1 + val2;
-		case '-': return val1 - val2;
-		case '*': return val1 * val2;
+		case '-': {if (op == p)
+					  return -val2;
+				   else return val1 - val2;}
+		case '*': {if (op == p)
+					  return vaddr_read(val2,4);
+				   else return val1 * val2;}
 		case '/': return val1 / val2;
+		case TK_EQ: return val1 == val2;
+		case TK_UNEQ: return val1 != val2;
 		default: assert(0);
 	}
   }

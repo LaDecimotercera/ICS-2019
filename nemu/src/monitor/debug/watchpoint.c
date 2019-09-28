@@ -99,4 +99,13 @@ bool check_watchpoint() {
 	p = p->next;
   }
   return false;
-};
+}
+
+void show_watchpoint() {
+  WP *p = head;
+  if (!p) printf("No watchpoint found!\n");  
+  while(p) {
+	printf("%d %x\n", p->NO, p->Old_value);
+	p=p->next;
+  }
+}

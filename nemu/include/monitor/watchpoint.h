@@ -17,5 +17,6 @@ typedef struct watchpoint {
   void free_wp(int NO);
   void set_watchpoint(char *expr);
   void del_watchpoint(int NO);
+  void show_watchpoint();
   bool check_watchpoint();
 #endif
