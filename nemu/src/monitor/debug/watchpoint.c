@@ -54,7 +54,7 @@ void free_wp(int NO) {
 		p->next = free_;
 		free_ = p;
 	    point_cnt -= 1;
-		printf("Delete watchpoint %d\n", p->NO);
+		printf("Deleted watchpoint %d\n", p->NO);
 	}
 	else if (p == NULL) printf("No watchpoint found!\n");
   }
@@ -83,7 +83,7 @@ bool check_watchpoint() {
   while (q) { 
     q->New_value = expr(q->tokens, &success_);
     if (success_ && q->New_value!=q->Old_value) {
-      printf("Trigger watchpoint %d\n", q->NO);
+      printf("Hit watchpoint %d\n", q->NO);
       q->Old_value = q->New_value;
 	  return true; 
     }
