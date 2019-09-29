@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
 	}
 	memset(str,'\0',sizeof(str));
   }
-	
+  fclose(fp);	
   /* Receive commands from user. */
   ui_mainloop(is_batch_mode);
 
