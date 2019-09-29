@@ -88,8 +88,9 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
 		if (rules[i].token_type==TK_NOTYPE)
-			continue;	
-        switch (rules[i].token_type) {
+		//	continue;	
+			break;
+		switch (rules[i].token_type) {
 			case '+':
 			case '-':
 			case '*':
