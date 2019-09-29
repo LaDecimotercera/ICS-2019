@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
     bool success = true;
 //  printf(strtok(NULL," "));
 //	printf("%d",expr(strtok(NULL," "),&success));
-	char *e = strtok(NULL," "); 
+	char *e = strtok(NULL,"@"); 
 	if(res!=expr(e,&success)) {
 		printf("Test fault\n");
 		break;
