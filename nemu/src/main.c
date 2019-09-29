@@ -13,14 +13,15 @@ int main(int argc, char *argv[]) {
   assert(fp != NULL);
   char str[65536]="";
   while (fgets(str,65536,fp)!=NULL) {
-    int res=atoi(strtok(str," "));
+    int res=atoi(strtok(str," ")); printf("%d",res);
 //	sscanf(res, "%d", &strtok(str," "));
 //    char buf[65536]="";
-    bool True = true;
-	if(res!=expr(strtok(NULL," "),&True)) {
-		printf("Test fault\n");
-		break;
-	}
+//    bool True = true;
+	printf(strtok(NULL," "));
+//	if(res!=expr(strtok(NULL," "),&True)) {
+//		printf("Test fault\n");
+//		break;
+//	}
 	memset(str,'\0',sizeof(str));
   }
 	
