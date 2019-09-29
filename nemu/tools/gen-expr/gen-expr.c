@@ -31,7 +31,7 @@ static inline void gen_num() {
 //	if (strcmp(buf[strlen(buf)-1],"/")==0)		
 //		while(num==0)
 //			num=choose(100);
-	sprintf(str,"%d",choose(100));
+	sprintf(str,"%u",choose(100));
 	strcat(buf,str);
 }
 

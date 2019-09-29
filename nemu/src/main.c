@@ -9,7 +9,7 @@ void ui_mainloop(int);
 int main(int argc, char *argv[]) {
   /* Initialize the monitor. */
   int is_batch_mode = init_monitor(argc, argv);
-  FILE *fp = fopen("/home/liweikang/ics2019/nemu/tools/gen-expr/input","r");
+/*  FILE *fp = fopen("/home/liweikang/ics2019/nemu/tools/gen-expr/input","r");
   assert(fp != NULL);
   char str[65536];
   while (fgets(str,sizeof(str),fp)) {
@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
 	}
 	memset(str,'\0',sizeof(str));
   }
-  fclose(fp);	
+  fclose(fp);*/	
   /* Receive commands from user. */
   ui_mainloop(is_batch_mode);
 
