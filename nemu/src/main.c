@@ -14,6 +14,7 @@ int main(int argc, char *argv[]) {
   char str[65536]="";
   while (fgets(str,65536,fp)!=NULL) {
     int res=atoi(strtok(str," "));
+//	sscanf(res, "%d", &strtok(str," "));
 //    char buf[65536]="";
     bool True = true;
 	if(res!=expr(strtok(NULL," "),&True)) {
