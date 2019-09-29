@@ -16,8 +16,9 @@ int main(int argc, char *argv[]) {
     int res=atoi(strtok(str," ")); printf("%d",res);
 //	sscanf(res, "%d", &strtok(str," "));
 //    char buf[65536]="";
-//    bool True = true;
-	printf(strtok(NULL," "));
+    bool True = true;
+//  printf(strtok(NULL," "));
+	printf("%d",expr(strtok(NULL," "),&True));
 //	if(res!=expr(strtok(NULL," "),&True)) {
 //		printf("Test fault\n");
 //		break;
