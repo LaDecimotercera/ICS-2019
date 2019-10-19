@@ -81,7 +81,8 @@ static inline void rtl_update_ZF(const rtlreg_t* result, int width) {
   // TODO();
   rtlreg_t is_zero;
   //rtl_mux(&is_zero, result, &0, &1);
-  is_zero = (*result == 0) ? 1 : 0;
+  //is_zero = (*result == 0) ? 1 : 0;
+  is_zero = ((*result & (0xFFFFFFFF >> ((4 - width) * 8))) == 0);
   rtl_set_ZF(&is_zero);
 }
 
