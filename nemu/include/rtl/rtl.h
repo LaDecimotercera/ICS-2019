@@ -146,12 +146,14 @@ static inline void rtl_setrelopi(uint32_t relop, rtlreg_t *dest,
 }
 
 static inline void rtl_msb(rtlreg_t* dest, const rtlreg_t* src1, int width) {
-  *dest = src1[width * 8 - 1];
+  *dest = (*src1 >> (width * 8 - 1)) & (0x1);
+  //rtl_li(dest, src1[width * 8 - 1]);		
 }
 
 static inline void rtl_mux(rtlreg_t* dest, const rtlreg_t* cond, const rtlreg_t* src1, const rtlreg_t* src2) {
   // dest <- (cond ? src1 : src2)
-  TODO();
+  // TODO();
+  *dest = *cond ? *src1 : *src2; 
 }
 
 #include "isa/rtl.h"
