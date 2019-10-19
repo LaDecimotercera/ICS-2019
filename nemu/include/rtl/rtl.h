@@ -136,7 +136,11 @@ static inline void rtl_not(rtlreg_t *dest, const rtlreg_t* src1) {
 
 static inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width) {
   // dest <- signext(src1[(width * 8 - 1) .. 0])
-  TODO();
+  // TODO();
+  int32_t tmp = (int32_t)(*src1);
+  tmp = tmp << (4 - width) * 8;
+  tmp = tmp >> (4 - width) * 8;
+  *dest = tmp;  
 }
 
 static inline void rtl_setrelopi(uint32_t relop, rtlreg_t *dest,
@@ -146,14 +150,14 @@ static inline void rtl_setrelopi(uint32_t relop, rtlreg_t *dest,
 }
 
 static inline void rtl_msb(rtlreg_t* dest, const rtlreg_t* src1, int width) {
-  *dest = (*src1 >> (width * 8 - 1)) & (0x1);
+  *dest = ((*src1) >> (width * 8 - 1)) & (0x1);
   //rtl_li(dest, src1[width * 8 - 1]);		
 }
 
 static inline void rtl_mux(rtlreg_t* dest, const rtlreg_t* cond, const rtlreg_t* src1, const rtlreg_t* src2) {
   // dest <- (cond ? src1 : src2)
   // TODO();
-  *dest = *cond ? *src1 : *src2; 
+  *dest = ((*cond) & (0x1)) ? *src1 : *src2; 
 }
 
 #include "isa/rtl.h"
