@@ -27,15 +27,28 @@ typedef struct {
   /* Do NOT change the order of the GPRs' definitions. */
 	 struct {
               rtlreg_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
-              vaddr_t pc;
 	 };
   };
- // vaddr_t pc;
+
+  vaddr_t pc;
 
   /* In NEMU, rtlreg_t is exactly uint32_t. This makes RTL instructions
    * in PA2 able to directly access these registers.
    */
-
+  union {
+	 struct{
+			 uint32_t CF: 1;
+			 unsigned _0: 5;
+			 uint32_t ZF: 1;
+			 uint32_t SF: 1;
+			 unsigned _1: 1;
+			 uint32_t IF: 1;
+			 unsigned _2: 1;
+			 uint32_t OF: 1;
+			 unsigned _3: 20;
+	};
+	uint32_t val; 
+  }	eflags;  
 } CPU_state;
 
 static inline int check_reg_index(int index) {
