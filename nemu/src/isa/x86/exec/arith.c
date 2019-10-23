@@ -6,7 +6,7 @@ make_EHelper(add) {
   print_asm_template2(add);
 }
 
-make_EHelper(sub) {
+make_EHelper(sub) { //not understand yet
   // TODO();
   rtl_sub(&t0, &id_dest->val, &id_src->val);
   rtl_setrelop(RELOP_LTU, &t1, &id_dest->val, &t0);
