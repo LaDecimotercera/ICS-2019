@@ -45,9 +45,9 @@ static inline void rtl_is_sub_overflow(rtlreg_t* dest,
   //rtl_sub(&s0, src1, src2);
   //rtl_setrelop(RELOP_LTU, dest, src1, &s0);
   rtl_xor(&s0, src1, src2);
-  rtl_xor(&s1, src1, res);
-  rtl_and(&s0, &s0, &s1);
-  rtl_msb(dest, &s0, width);
+  //rtl_xor(&s1, src1, res);
+  //rtl_and(&s0, &s0, &s1);
+  //rtl_msb(dest, &s0, width);
   //TODO();
 }
 
