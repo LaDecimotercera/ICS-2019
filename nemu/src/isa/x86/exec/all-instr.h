@@ -26,3 +26,4 @@ make_EHelper(xchg);
 make_EHelper(nop);
 make_EHelper(jmp);
 make_EHelper(imul2);
+make_EHelper(dec);
