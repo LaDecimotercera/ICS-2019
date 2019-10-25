@@ -31,8 +31,8 @@ make_group(gp2,
 
 /* 0xf6, 0xf7 */
 make_group(gp3,
-    EX(test), EMPTY, EX(not), EMPTY,
-    EX(mul), EX(imul1), EX(div), EX(idiv))
+    IDEX(test_I, test), EMPTY, EX(not), EMPTY,
+    EX(mul), EX(imul1), EX(div), EX(idiv))//EX(test):bug appears
 
 /* 0xfe */
 make_group(gp4,
