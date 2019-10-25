@@ -35,7 +35,7 @@ void rtl_setcc(rtlreg_t* dest, uint8_t subcode) {
       rtl_xor(&t1, &s1, &t0);
       //rtl_and(dest, &s0, &t1); WRONG in manual
       rtl_or(dest, &s0, &t1);
-    }
+    } break; //FORGOT to BREAK!!! GOD DAMN IT!!!
       //TODO();
     default: panic("should not reach here");
     case CC_P: panic("n86 does not have PF");
