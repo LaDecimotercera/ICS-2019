@@ -51,7 +51,7 @@ make_EHelper(call_rm) {//jmp_rm + call
   rtl_jr(&id_dest->val);
   rtl_li(&s0, decinfo.seq_pc);
   rtl_push(&s0);
-  rtl_j(decinfo.jmp_pc);
+  //rtl_j(decinfo.jmp_pc);
 
   //TODO();
 
