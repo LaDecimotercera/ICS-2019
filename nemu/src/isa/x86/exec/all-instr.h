@@ -37,3 +37,4 @@ make_EHelper(not);
 make_EHelper(adc);
 make_EHelper(mul);
 make_EHelper(cltd);
+make_EHelper(cwtl);

@@ -32,18 +32,28 @@ make_EHelper(popa) {
 
 make_EHelper(leave) {
   rtl_mv(&cpu.esp, &cpu.ebp);
-  rtl_pop(&cpu.ebp);//UNDONE
+  rtl_pop(&cpu.ebp); //UNDONE
   //TODO();
 
   print_asm("leave");
 }
 
 make_EHelper(cltd) {
-  if (decinfo.isa.is_operand_size_16) {
-    TODO();
-  }
+  if (decinfo.isa.is_operand_size_16) {//Look into rtl.h pls.
+    rtl_lr(&s0, R_AX, 2);
+    rtl_msb(&s1, &s0, 2);
+    if (s1) s1 = 0xffff;
+    else s1 = 0;
+    rtl_sr(R_DX, &s1, 2); 
+    //TODO();
+  } 
   else {
-    TODO();
+    rtl_lr(&s0, R_EAX, 4);
+    rtl_msb(&s1, &s0, 4);
+    if (s1) s1 = 0xffffffff;
+    else s1 = 0;
+    rtl_sr(R_EDX, &s1, 4);
+    //TODO();
   }
 
   print_asm(decinfo.isa.is_operand_size_16 ? "cwtl" : "cltd");
