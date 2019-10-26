@@ -40,7 +40,7 @@ int strncmp(const char* s1, const char* s2, size_t n) {
 
 void* memset(void* v,int c,size_t n) {
   char *xs = (char *)v;
-  while(n--){
+  while(n--) {
     *xs++ = c;
   }
   return v; 
