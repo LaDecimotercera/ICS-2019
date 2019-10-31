@@ -4,7 +4,7 @@
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc){
   if(ref_r->eax!=cpu.eax || ref_r->ecx!=cpu.ecx || ref_r->edx!=cpu.edx || 
   ref_r->ebx!=cpu.ebx || ref_r->esp!=cpu.esp || ref_r->ebp!=cpu.ebp || 
-  ref_r->esi!=cpu.esi || ref_r->edi!=cpu.edi || ref_r->pc!=pc) {
+  ref_r->esi!=cpu.esi || ref_r->edi!=cpu.edi || ref_r->pc!=cpu.pc) {
     printf("qemus eax:0x%08x, cpu eax:0x%08x @pc:0x%08x\n", ref_r->eax, cpu.eax, pc);
     printf("qemus ecx:0x%08x, cpu ecx:0x%08x @pc:0x%08x\n", ref_r->ecx, cpu.ecx, pc);
     printf("qemus edx:0x%08x, cpu edx:0x%08x @pc:0x%08x\n", ref_r->edx, cpu.edx, pc);
