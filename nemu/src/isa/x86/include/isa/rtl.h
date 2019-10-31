@@ -64,7 +64,7 @@ static inline void rtl_is_add_overflow(rtlreg_t* dest,
   rtl_not(&t0, &t0);
   rtl_xor(&t1, src1, res);
   rtl_and(&t0, &t0, &t1);
-  rtl_msb(dest, &t0, width);
+  rtl_msb(dest, &t0, width);//can be approved
   //TODO();
 }
 
