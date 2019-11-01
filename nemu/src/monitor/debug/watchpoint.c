@@ -36,7 +36,8 @@ void free_wp(int NO) {
   WP *p = head;
   WP *q = p;
   if (head == NULL) {
-	printf("No watchpoint found!\n"); return;
+	//printf("No watchpoint found!\n");
+  return;
   }
   if (p->NO == NO) {
 	head = head->next;
