@@ -57,7 +57,4 @@ make_EHelper(out) {
   //default: break;
   }
   print_asm_template2(out);
-#if defined(DIFF_TEST)
-	difftest_skip_ref();
-#endif
 }
