@@ -2,11 +2,7 @@
 
 make_EHelper(lidt) {
   TODO();
-  //if (decinfo.isa.is_operand_size_16) 
-  //THEN IDTR.Limit:Base := m16:24 (* 24 bits of base loaded *)
-    //cpu.
-  //ELSE IDTR.Limit:Base := m16:32
-  //else cpu.idtr.base = 
+
   print_asm_template1(lidt);
 }
 
