@@ -36,7 +36,7 @@ void free_wp(int NO) {
   WP *p = head;
   WP *q = p;
   if (head == NULL) {
-	printf("No watchpoint found!\n"); return;
+	//printf("No watchpoint found!\n"); return;
   }
   if (p->NO == NO) {
 	head = head->next;
@@ -56,7 +56,7 @@ void free_wp(int NO) {
 	    point_cnt -= 1;
 		printf("Deleted watchpoint %d\n", p->NO);
 	}
-	else if (p == NULL) printf("No watchpoint found!\n");
+	//else if (p == NULL) printf("No watchpoint found!\n");
   }
 }
 	
@@ -77,7 +77,7 @@ bool check_watchpoint() {
   WP *q = head;
   bool success_ = true;
   if (!q) {
-	printf("No watchpoint found!\n");
+	//printf("No watchpoint found!\n");
 	return false;
   }
   while (q) { 
@@ -97,7 +97,7 @@ bool check_watchpoint() {
 
 void show_watchpoint() {
   WP *p = head;
-  if (!p) printf("No watchpoint found!\n");  
+  //if (!p) printf("No watchpoint found!\n");  
   while(p) {
 	printf("%d %x\n", p->NO, p->Old_value);
 	p=p->next;
