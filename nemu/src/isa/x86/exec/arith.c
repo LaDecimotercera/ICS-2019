@@ -24,22 +24,8 @@ make_EHelper(add) {
   print_asm_template2(add);
 }
 
-make_EHelper(sub) { //not understand yet
+make_EHelper(sub) { //have some problems
   // TODO();
-  /*rtl_sub(&t0, &id_dest->val, &id_src->val);
-  rtl_setrelop(RELOP_LTU, &t1, &id_dest->val, &t0);
-  operand_write(id_dest, &t0);
-
-  rtl_update_ZFSF(&t0, id_dest->width);
- 
-  rtl_set_CF(&t1);
- 
-  rtl_xor(&s0, &id_dest->val, &id_src->val);
-  rtl_xor(&s1, &id_dest->val, &t0);
-  rtl_and(&s0, &s0, &s1);
-  rtl_msb(&s0, &s0, id_dest->width);
-  rtl_set_OF(&s0);*/
-  
   // s0 = dest - src
   rtl_sub(&s0, &id_dest->val, &id_src->val); 
   operand_write(id_dest, &s0); 
@@ -138,13 +124,13 @@ make_EHelper(adc) {
   }
 
   rtl_update_ZFSF(&s1, id_dest->width);
-  printf("???? %d\n",s1);
+  //printf("???? %d\n",s1);
   // update CF
   rtl_is_add_carry(&s1, &s1, &s0);
   rtl_is_add_carry(&s0, &s0, &id_dest->val);
   rtl_or(&s0, &s0, &s1);
   rtl_set_CF(&s0);
-  printf("!!!! %d\n",s1);
+  //printf("!!!! %d\n",s1);
   // update OF
   rtl_is_add_overflow(&s0, &s1, &id_dest->val, &id_src->val, id_dest->width);
   rtl_set_OF(&s0);
@@ -166,13 +152,13 @@ make_EHelper(sbb) {
   }
 
   rtl_update_ZFSF(&s1, id_dest->width);
-  printf("???? %d",s1);
+  // printf("???? %d",s1);
   // update CF
   rtl_is_sub_carry(&s1, &s1, &s0);
   rtl_is_sub_carry(&s0, &s0, &id_dest->val);
   rtl_or(&s0, &s0, &s1);
   rtl_set_CF(&s0);
-  printf("!!!! %d",s1);
+  // printf("!!!! %d",s1);
   // update OF
   rtl_is_sub_overflow(&s0, &s1, &id_dest->val, &id_src->val, id_dest->width);
   rtl_set_OF(&s0);
