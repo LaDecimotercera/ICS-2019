@@ -2,6 +2,8 @@
 #include <amdev.h>
 #include <nemu.h>
 
+# define RTC_PORT     0x48
+
 uint32_t cur_time;  
 size_t __am_timer_read(uintptr_t reg, void *buf, size_t size) {
   switch (reg) {
