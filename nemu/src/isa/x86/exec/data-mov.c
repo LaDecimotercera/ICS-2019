@@ -102,16 +102,14 @@ make_EHelper(movsb) { //still confused
   rtl_lr(&t0, R_EDI, 4);
   rtl_sm(&t0, &s1, 1); //[destination-index] := [source-index];
 //used to be rtl_sm(&t1, &s1, 4)
-  //rtl_addi(&s0, &s0, incdec);
-  s0 += incdec;
-  rtl_sr(R_EDI, &s0, 4);
+  rtl_addi(&s0, &s0, incdec);
+  rtl_sr(R_ESI, &s0, 4);
 
-  //rtl_addi(&t0, &t0,incdec);
-  t0 += incdec;
-  rtl_sr(R_ESI, &t0, 4);
+  rtl_addi(&t0, &t0, incdec);
+  rtl_sr(R_EDI, &t0, 4);
 
   print_asm_template2(movsb);
-  /*int incdec;// = 1;
+  /*int incdec;
   switch (decinfo.opcode & 0xff) {
     case 0xa4:
       incdec = cpu.eflags.DF ? -1 : 1;
