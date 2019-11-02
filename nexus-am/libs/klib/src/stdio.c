@@ -53,9 +53,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 	    case 's':
         tmp = va_arg(ap,char *);
 	      len = strlen(tmp);
-	      for(i = 0;i < len;i ++){
+	      for(i = 0;i < len;i ++)
 		      *str++ = *tmp++;
-	      }
 	      continue;
 	    case 'd': break;
       //case 'x': break;
