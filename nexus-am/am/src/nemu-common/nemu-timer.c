@@ -2,13 +2,19 @@
 #include <amdev.h>
 #include <nemu.h>
 
+#define RTC_PORT 0x48   // Note that this is not the standard
+#define RTC_MMIO 0xa1000048   //Copy from nemu/../timer.c
+
+unsigned long long cur_time;  
 size_t __am_timer_read(uintptr_t reg, void *buf, size_t size) {
   switch (reg) {
     case _DEVREG_TIMER_UPTIME: {//modified
       _DEV_TIMER_UPTIME_t *uptime = (_DEV_TIMER_UPTIME_t *)buf;
-      uptime->hi = 0;
-      uptime->lo = 0; 
-      return sizeof((uptime->hi << 32LL) | uptime->lo);
+      //(uptime->hi << 32LL) | uptime->lo;
+      cur_time = inl(RTC_PORT);
+      uptime->hi = cur_time >> 32LL; 
+      uptime->lo = cur_time; 
+      return sizeof(_DEV_TIMER_UPTIME_t);
     }
     case _DEVREG_TIMER_DATE: {
       _DEV_TIMER_DATE_t *rtc = (_DEV_TIMER_DATE_t *)buf;
