@@ -93,20 +93,21 @@ make_EHelper(movsb) { //still confused
   int incdec;
   rtlreg_t flag;
   rtl_get_DF(&flag);
-  //if (flag == 0) 
-  //  incdec = 1;
-  //else incdec = -1;
-  incdec = cpu.eflags.DF ? -1 : 1;
+  if (flag == 0) 
+    incdec = 1;
+  else incdec = -1;
 
   rtl_lr(&s0, R_ESI, 4);
   rtl_lm(&s1, &s0, 1);  
   rtl_lr(&t0, R_EDI, 4);
   rtl_sm(&t0, &s1, 1); //[destination-index] := [source-index];
 //used to be rtl_sm(&t1, &s1, 4)
-  rtl_addi(&s0, &s0, incdec);
+  //rtl_addi(&s0, &s0, incdec);
+  s0 += incdec;
   rtl_sr(R_EDI, &s0, 4);
 
-  rtl_addi(&t0, &t0,incdec);
+  //rtl_addi(&t0, &t0,incdec);
+  t0 += incdec;
   rtl_sr(R_ESI, &t0, 4);
 
   print_asm_template2(movsb);
