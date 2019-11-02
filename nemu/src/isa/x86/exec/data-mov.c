@@ -109,7 +109,7 @@ make_EHelper(movsb) { //still confused
   rtl_sr(R_ESI, &t0, 4);
 
   print_asm_template2(movsb);*/
-  int incdec = 1;
+  int incdec;// = 1;
   switch (decinfo.opcode & 0xff) {
     case 0xa4:
       incdec = cpu.eflags.DF ? -1 : 1;
