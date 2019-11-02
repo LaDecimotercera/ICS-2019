@@ -43,9 +43,9 @@ typedef struct {
 			 uint32_t SF: 1;
 			 unsigned _1: 1;
 			 uint32_t IF: 1;
-			 unsigned _2: 1;
+       uint32_t DF: 1;
 			 uint32_t OF: 1;
-			 unsigned _3: 20;
+			 unsigned _2: 20;
 	};
 	uint32_t val; 
   }	eflags; 

@@ -49,3 +49,4 @@ make_EHelper(lidt);
 make_EHelper(lgdt);
 make_EHelper(neg);
 make_EHelper(rol);
+make_EHelper(movsb);
