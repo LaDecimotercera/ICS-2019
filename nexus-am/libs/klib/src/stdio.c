@@ -44,10 +44,10 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         fmt++;
       }
     }
-    else if(*fmt == '*'){
+    /*else if(*fmt == '*'){
       fmt++;
       field_width = va_arg(ap,int);
-    }
+    }*/
 
     switch(*fmt){
 	    case 's':
@@ -58,8 +58,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 	      }
 	      continue;
 	    case 'd': break;
-      case 'x': break;
-      case 'u': break;
+      //case 'x': break;
+      //case 'u': break;
     }
 
     num = va_arg(ap,int);
