@@ -121,32 +121,7 @@ make_EHelper(movsb) { //still confused
       rtl_sm(&s0, &s1, 1);
       s0 += incdec;
       rtl_sr(R_EDI, &s0, 4);
-      print_asm("movsb")
-      break;
-    case 0xa5:
-      if (decinfo.isa.is_operand_size_16) {
-        incdec = cpu.eflags.DF ? -2 : 2;
-        rtl_lr(&s0, R_ESI, 4);
-        rtl_lm(&s1, &s0, 2);
-        s0 += incdec;
-        rtl_sr(R_ESI, &s0, 4);
-        rtl_lr(&s0, R_EDI, 4);
-        rtl_sm(&s0, &s1, 2);
-        s0 += incdec;
-        rtl_sr(R_EDI, &s0, 4);
-        print_asm("movsw")
-      } else {
-        incdec = cpu.eflags.DF ? -4 : 4;
-        rtl_lr(&s0, R_ESI, 4);
-        rtl_lm(&s1, &s0, 4);
-        s0 += incdec;
-        rtl_sr(R_ESI, &s0, 4);
-        rtl_lr(&s0, R_EDI, 4);
-        rtl_sm(&s0, &s1, 4);
-        s0 += incdec;
-        rtl_sr(R_EDI, &s0, 4);
-        print_asm("movsl")
-      }
+      print_asm("movsb");
       break;
     default:
       panic("movs");
