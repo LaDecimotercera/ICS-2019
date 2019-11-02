@@ -49,6 +49,3 @@ make_EHelper(lidt);
 make_EHelper(lgdt);
 make_EHelper(neg);
 make_EHelper(rol);
-make_EHelper(ror);
-make_EHelper(rcl);
-make_EHelper(rcr);
