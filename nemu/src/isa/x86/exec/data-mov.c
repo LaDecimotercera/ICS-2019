@@ -90,7 +90,7 @@ make_EHelper(movzx) {
 }
 
 make_EHelper(movsb) { //still confused
-/*  int incdec;
+  int incdec;
   rtlreg_t flag;
   rtl_get_DF(&flag);
   if (flag == 0) 
@@ -108,8 +108,8 @@ make_EHelper(movsb) { //still confused
   rtl_addi(&t0, &t0,incdec);
   rtl_sr(R_ESI, &t0, 4);
 
-  print_asm_template2(movsb);*/
-  int incdec = 1;
+  print_asm_template2(movsb);
+  /*int incdec = 1;
   switch (decinfo.opcode & 0xff) {
     case 0xa4:
       incdec = cpu.eflags.DF ? -1 : 1;
@@ -149,8 +149,8 @@ make_EHelper(movsb) { //still confused
       }
       break;
     default:
-      panic("movs");
-}
+      panic("movs");*/
+
 }
 
 make_EHelper(lea) {
