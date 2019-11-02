@@ -4,17 +4,14 @@
 #include <klib.h>
 
 //static uint32_t fb[400*300] = {};
-static inline int min(int x, int y) {
-  return (x < y) ? x : y;
-}
 
 size_t __am_video_read(uintptr_t reg, void *buf, size_t size) {
   switch (reg) {
     case _DEVREG_VIDEO_INFO: {
       _DEV_VIDEO_INFO_t *info = (_DEV_VIDEO_INFO_t *)buf;
-      //uint32_t data = inl(SCREEN_ADDR);
-      info->height = 300;//data & 0xffffu;
-      info->width = 400;//data >> 16;
+      uint32_t data = inl(SCREEN_ADDR);
+      info->height = data & 0xffffu;
+      info->width = data >> 16;
       return sizeof(_DEV_VIDEO_INFO_t);
     }
   }
@@ -26,10 +23,10 @@ size_t __am_video_write(uintptr_t reg, void *buf, size_t size) {
     case _DEVREG_VIDEO_FBCTL: {
       _DEV_VIDEO_FBCTL_t *ctl = (_DEV_VIDEO_FBCTL_t *)buf;
       
-      /*uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
+      uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
       for (int row = 0; row < ctl->h; ++row)
         memcpy(&fb[(row + ctl->y) * screen_width() + ctl->x], &ctl->pixels[row * ctl->w], ctl->w * 4);
-      */
+
       if (ctl->sync) {
         outl(SYNC_ADDR, 0);
       }
