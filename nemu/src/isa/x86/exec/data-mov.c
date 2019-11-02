@@ -100,7 +100,7 @@ make_EHelper(movsb) { //still confused
   rtl_lr(&s0, R_ESI, 4);
   rtl_lm(&s1, &s0, 1);  
   rtl_lr(&t0, R_EDI, 4);
-  rtl_sm(&t1, &s1, 1); //[destination-index] := [source-index];
+  rtl_sm(&t0, &s1, 1); //[destination-index] := [source-index];
 
   rtl_addi(&s0, &s0, incdec);
   rtl_sr(R_EDI, &s0, 4);
