@@ -24,6 +24,7 @@
 # define SERIAL_PORT  0xa10003f8
 # define KBD_ADDR     0xa1000060
 # define RTC_ADDR     0xa1000048
+# define RTC_PORT     0x48
 # define SCREEN_ADDR  0xa1000100
 # define SYNC_ADDR    0xa1000104
 # define FB_ADDR      0xa0000000
