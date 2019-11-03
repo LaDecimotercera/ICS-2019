@@ -89,7 +89,7 @@ make_EHelper(movzx) {
   print_asm_template2(movzx);
 }
 
-make_EHelper(movsb) { //still confused
+make_EHelper(movsb) { 
   int incdec;
   rtlreg_t flag;
   rtl_get_DF(&flag);
@@ -103,29 +103,12 @@ make_EHelper(movsb) { //still confused
   rtl_sm(&t0, &s1, 1); //[destination-index] := [source-index];
 //used to be rtl_sm(&t1, &s1, 4)
   rtl_addi(&s0, &s0, incdec);
-  rtl_sr(R_ESI, &s0, 4);
+  rtl_sr(R_EDI, &s0, 4);
 
   rtl_addi(&t0, &t0, incdec);
-  rtl_sr(R_EDI, &t0, 4);
+  rtl_sr(R_ESI, &t0, 4);
 
   print_asm_template2(movsb);
-  /*int incdec;
-  switch (decinfo.opcode & 0xff) {
-    case 0xa4:
-      incdec = cpu.eflags.DF ? -1 : 1;
-      rtl_lr(&s0, R_ESI, 4);
-      rtl_lm(&s1, &s0, 1);
-      s0 += incdec;
-      rtl_sr(R_ESI, &s0, 4);
-      rtl_lr(&s0, R_EDI, 4);
-      rtl_sm(&s0, &s1, 1);
-      s0 += incdec;
-      rtl_sr(R_EDI, &s0, 4);
-      print_asm("movsb");
-      break;
-    default:
-      panic("movs");
-}*/
 }
 
 make_EHelper(lea) {
