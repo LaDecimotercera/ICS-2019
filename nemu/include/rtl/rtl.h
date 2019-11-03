@@ -13,11 +13,11 @@ bool interpret_relop(uint32_t relop, const rtlreg_t src1, const rtlreg_t src2);
 
 /* RTL basic instructions */
 
-static inline void interpret_rtl_li(rtlreg_t* dest, uint32_t imm) {
+/*static*/ inline void interpret_rtl_li(rtlreg_t* dest, uint32_t imm) {
   *dest = imm;
 }
 
-static inline void interpret_rtl_mv(rtlreg_t* dest, const rtlreg_t *src1) {
+/*static*/ inline void interpret_rtl_mv(rtlreg_t* dest, const rtlreg_t *src1) {
   *dest = *src1;
 }
 
@@ -49,43 +49,43 @@ make_rtl_arith_logic(div_r)
 make_rtl_arith_logic(idiv_q)
 make_rtl_arith_logic(idiv_r)
 
-static inline void interpret_rtl_div64_q(rtlreg_t* dest,
+/*static*/ inline void interpret_rtl_div64_q(rtlreg_t* dest,
     const rtlreg_t* src1_hi, const rtlreg_t* src1_lo, const rtlreg_t* src2) {
   uint64_t dividend = ((uint64_t)(*src1_hi) << 32) | (*src1_lo);
   uint32_t divisor = (*src2);
   *dest = dividend / divisor;
 }
 
-static inline void interpret_rtl_div64_r(rtlreg_t* dest,
+/*static*/ inline void interpret_rtl_div64_r(rtlreg_t* dest,
     const rtlreg_t* src1_hi, const rtlreg_t* src1_lo, const rtlreg_t* src2) {
   uint64_t dividend = ((uint64_t)(*src1_hi) << 32) | (*src1_lo);
   uint32_t divisor = (*src2);
   *dest = dividend % divisor;
 }
 
-static inline void interpret_rtl_idiv64_q(rtlreg_t* dest,
+/*static*/ inline void interpret_rtl_idiv64_q(rtlreg_t* dest,
     const rtlreg_t* src1_hi, const rtlreg_t* src1_lo, const rtlreg_t* src2) {
   int64_t dividend = ((uint64_t)(*src1_hi) << 32) | (*src1_lo);
   int32_t divisor = (*src2);
   *dest = dividend / divisor;
 }
 
-static inline void interpret_rtl_idiv64_r(rtlreg_t* dest,
+/*static*/ inline void interpret_rtl_idiv64_r(rtlreg_t* dest,
     const rtlreg_t* src1_hi, const rtlreg_t* src1_lo, const rtlreg_t* src2) {
   int64_t dividend = ((uint64_t)(*src1_hi) << 32) | (*src1_lo);
   int32_t divisor = (*src2);
   *dest = dividend % divisor;
 }
 
-static inline void interpret_rtl_lm(rtlreg_t *dest, const rtlreg_t* addr, int len) {
+/*static*/ inline void interpret_rtl_lm(rtlreg_t *dest, const rtlreg_t* addr, int len) {
   *dest = vaddr_read(*addr, len);
 }
 
-static inline void interpret_rtl_sm(const rtlreg_t* addr, const rtlreg_t* src1, int len) {
+/*static*/ inline void interpret_rtl_sm(const rtlreg_t* addr, const rtlreg_t* src1, int len) {
   vaddr_write(*addr, *src1, len);
 }
 
-static inline void interpret_rtl_host_lm(rtlreg_t* dest, const void *addr, int len) {
+/*static*/ inline void interpret_rtl_host_lm(rtlreg_t* dest, const void *addr, int len) {
   switch (len) {
     case 4: *dest = *(uint32_t *)addr; return;
     case 1: *dest = *( uint8_t *)addr; return;
@@ -94,7 +94,7 @@ static inline void interpret_rtl_host_lm(rtlreg_t* dest, const void *addr, int l
   }
 }
 
-static inline void interpret_rtl_host_sm(void *addr, const rtlreg_t *src1, int len) {
+/*static*/ inline void interpret_rtl_host_sm(void *addr, const rtlreg_t *src1, int len) {
   switch (len) {
     case 4: *(uint32_t *)addr = *src1; return;
     case 1: *( uint8_t *)addr = *src1; return;
@@ -103,22 +103,22 @@ static inline void interpret_rtl_host_sm(void *addr, const rtlreg_t *src1, int l
   }
 }
 
-static inline void interpret_rtl_setrelop(uint32_t relop, rtlreg_t *dest,
+/*static*/ inline void interpret_rtl_setrelop(uint32_t relop, rtlreg_t *dest,
     const rtlreg_t *src1, const rtlreg_t *src2) {
   *dest = interpret_relop(relop, *src1, *src2);
 }
 
-static inline void interpret_rtl_j(vaddr_t target) {
+/*static*/ inline void interpret_rtl_j(vaddr_t target) {
   cpu.pc = target;
   decinfo_set_jmp(true);
 }
 
-static inline void interpret_rtl_jr(rtlreg_t *target) {
+/*static*/ inline void interpret_rtl_jr(rtlreg_t *target) {
   cpu.pc = *target;
   decinfo_set_jmp(true);
 }
 
-static inline void interpret_rtl_jrelop(uint32_t relop,
+/*static*/ inline void interpret_rtl_jrelop(uint32_t relop,
     const rtlreg_t *src1, const rtlreg_t *src2, vaddr_t target) {
   bool is_jmp = interpret_relop(relop, *src1, *src2);
   if (is_jmp) cpu.pc = target;
@@ -130,11 +130,11 @@ void interpret_rtl_exit(int state, vaddr_t halt_pc, uint32_t halt_ret);
 
 /* RTL pseudo instructions */
 
-static inline void rtl_not(rtlreg_t *dest, const rtlreg_t* src1) {
+/*static*/ inline void rtl_not(rtlreg_t *dest, const rtlreg_t* src1) {
   *dest = ~*src1;
 }
 
-static inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width) {
+/*static*/ inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width) {
   // dest <- signext(src1[(width * 8 - 1) .. 0])
   // TODO();
   int32_t tmp = (int32_t)(*src1);
@@ -143,13 +143,13 @@ static inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width) {
   *dest = tmp;  
 }
 
-static inline void rtl_setrelopi(uint32_t relop, rtlreg_t *dest,
+/*static*/ inline void rtl_setrelopi(uint32_t relop, rtlreg_t *dest,
     const rtlreg_t *src1, int imm) {
   rtl_li(&ir, imm);
   rtl_setrelop(relop, dest, src1, &ir);
 }
 
-static inline void rtl_msb(rtlreg_t* dest, const rtlreg_t* src1, int width) {
+/*static*/ inline void rtl_msb(rtlreg_t* dest, const rtlreg_t* src1, int width) {
   *dest = ((*src1) >> (width * 8 - 1)) & (0x1);
   //rtl_li(dest, src1[width * 8 - 1]);		
 }
