@@ -103,10 +103,10 @@ make_EHelper(movsb) {
   rtl_sm(&t0, &s1, 1); //[destination-index] := [source-index];
 //used to be rtl_sm(&t1, &s1, 4)
   rtl_addi(&s0, &s0, incdec);
-  rtl_sr(R_EDI, &s0, 4);
+  rtl_sr(R_ESI, &s0, 4);
 
   rtl_addi(&t0, &t0, incdec);
-  rtl_sr(R_ESI, &t0, 4);
+  rtl_sr(R_EDI, &t0, 4);
 
   print_asm_template2(movsb);
 }
