@@ -154,7 +154,7 @@ void interpret_rtl_exit(int state, vaddr_t halt_pc, uint32_t halt_ret);
   //rtl_li(dest, src1[width * 8 - 1]);		
 }
 
-static inline void rtl_mux(rtlreg_t* dest, const rtlreg_t* cond, const rtlreg_t* src1, const rtlreg_t* src2) {
+/*static*/ inline void rtl_mux(rtlreg_t* dest, const rtlreg_t* cond, const rtlreg_t* src1, const rtlreg_t* src2) {
   // dest <- (cond ? src1 : src2)
   // TODO();
   *dest = ((*cond) & (0x1)) ? *src1 : *src2; 
