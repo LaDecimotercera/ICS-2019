@@ -22,12 +22,12 @@ bool interpret_relop(uint32_t relop, const rtlreg_t src1, const rtlreg_t src2);
 }
 
 #define make_rtl_arith_logic(name) \
-  static inline void concat(interpret_rtl_, name) (rtlreg_t* dest, const rtlreg_t* src1, const rtlreg_t* src2) { \
+  /*static*/ inline void concat(interpret_rtl_, name) (rtlreg_t* dest, const rtlreg_t* src1, const rtlreg_t* src2) { \
     *dest = concat(c_, name) (*src1, *src2); \
   } \
   /* Actually those of imm version are pseudo rtl instructions,
    * but we define them here in the same macro */ \
-  static inline void concat(rtl_, name ## i) (rtlreg_t* dest, const rtlreg_t* src1, int imm) { \
+  /*static*/ inline void concat(rtl_, name ## i) (rtlreg_t* dest, const rtlreg_t* src1, int imm) { \
     rtl_li(&ir, imm); \
     rtl_ ## name (dest, src1, &ir); \
   }
