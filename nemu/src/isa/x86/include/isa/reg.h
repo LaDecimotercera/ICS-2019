@@ -36,7 +36,7 @@ typedef struct {
    * in PA2 able to directly access these registers.
    */
   union {
-	 struct{
+	 struct {
 			 uint32_t CF: 1;
 			 unsigned _0: 5;
 			 uint32_t ZF: 1;
@@ -49,6 +49,11 @@ typedef struct {
 	};
 	uint32_t val; 
   }	eflags; 
+
+  struct {
+    uint16_t limit;
+    uint32_t base;
+  } idtr;
 
 } CPU_state;
 
