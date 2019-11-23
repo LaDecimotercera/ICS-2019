@@ -30,7 +30,7 @@ make_EHelper(pusha) {
 	rtl_push(&cpu.esi);
 	rtl_push(&cpu.edi);
 
-    print_asm("pusha");
+  print_asm("pusha");
 }
 
 make_EHelper(popa) {
