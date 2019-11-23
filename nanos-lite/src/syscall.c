@@ -10,7 +10,7 @@ static inline size_t sys_write(int fd, void *buf, size_t count){
     } 
     return count;
   }
-  return 0;
+  return -1;
 }
 
 _Context* do_syscall(_Context *c) {
@@ -24,6 +24,7 @@ _Context* do_syscall(_Context *c) {
     case SYS_yield: _yield(); c->GPRx = 0; break;
     case SYS_exit: _halt(a[1]); break;
     case SYS_write: c->GPRx = sys_write(a[1], (void *)a[2], a[3]); break; 
+    case SYS_brk: c->GPRx = 0; break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 
