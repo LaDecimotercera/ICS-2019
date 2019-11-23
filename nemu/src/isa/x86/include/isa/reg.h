@@ -50,6 +50,8 @@ typedef struct {
 	uint32_t val; 
   }	eflags; 
 
+  uint16_t cs, ds, es, ss, fs, gs;
+
   struct {
     uint16_t limit;
     uint32_t base;

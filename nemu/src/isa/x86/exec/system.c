@@ -26,8 +26,9 @@ make_EHelper(mov_cr2r) {
 }
 
 make_EHelper(int) {
-  TODO();
-
+  //TODO();
+  extern void raise_intr(uint32_t NO, vaddr_t ret_addr);
+  raise_intr(id_dest->val, decinfo.seq_pc);
   print_asm("int %s", id_dest->str);
 
   difftest_skip_dut(1, 2);
