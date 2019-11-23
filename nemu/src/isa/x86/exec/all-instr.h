@@ -53,3 +53,4 @@ make_EHelper(movsb);//2.3
 make_EHelper(int);
 make_EHelper(pusha);
 make_EHelper(popa);
+make_EHelper(iret);
