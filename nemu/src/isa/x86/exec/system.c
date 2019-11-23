@@ -34,8 +34,14 @@ make_EHelper(int) {
   difftest_skip_dut(1, 2);
 }
 
-make_EHelper(iret) {
-  TODO();
+make_EHelper(iret) {//may 
+  //TODO();
+	rtl_pop(&decinfo.jmp_pc);
+	rtl_j(decinfo.jmp_pc);
+
+	rtl_pop(&t0);
+	cpu.cs = t0 & 0xffff;
+	rtl_pop(&cpu.eflags.val);
 
   print_asm("iret");
 }
