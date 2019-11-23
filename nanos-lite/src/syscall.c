@@ -10,7 +10,7 @@ static inline size_t sys_write(int fd, void *buf, size_t count){
     } 
     return count;
   }
-  return -1;
+  return 0;
 }
 
 _Context* do_syscall(_Context *c) {
