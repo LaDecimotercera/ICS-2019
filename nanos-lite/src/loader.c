@@ -13,7 +13,8 @@ extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
   //TODO();
-  Elf_Ehdr elf;
+  //In PA 3.2
+  /*Elf_Ehdr elf;
   Elf_Phdr ph;
   ramdisk_read(&elf, 0, sizeof(Elf_Ehdr));
   for (int i = 0; i < elf.e_phnum; i ++) {
@@ -23,7 +24,9 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
       memset((void *)(ph.p_vaddr + ph.p_filesz), 0, ph.p_memsz - ph.p_filesz); 
     }
   }
-  return elf.e_entry;
+  return elf.e_entry;*/
+  //In PA 3.3
+  
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
