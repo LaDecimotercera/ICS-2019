@@ -26,7 +26,11 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   }
   return elf.e_entry;*/
   //In PA 3.3
-  
+  Elf_Ehdr elf_ehdr;
+  int fd = fs_open(filename, 0, 0);
+  fs_read(fd, &elf_ehdr, sizeof(Elf_Ehdr));
+  fs_close(fd);
+  return elf_ehdr.e_entry;
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
