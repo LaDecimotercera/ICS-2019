@@ -2,6 +2,7 @@
 #include <elf.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include "fs.h"
 
 #ifdef __ISA_AM_NATIVE__
 # define Elf_Ehdr Elf64_Ehdr
@@ -33,11 +34,11 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   return elf.e_entry;*/
   //In PA 3.3
   Elf_Ehdr elf_ehdr;
+  Elf_Phdr elf_phdr;
   
   int fd = fs_open(filename, 0, 0);
   fs_read(fd, &elf_ehdr, sizeof(Elf_Ehdr));
   for (size_t i = 0; i < elf_ehdr.e_phnum; i ++) {
-    Elf_Phdr elf_phdr;
     fs_lseek(fd, elf_ehdr.e_phoff + i * elf_ehdr.e_phentsize, SEEK_SET);
     fs_read(fd, (void *)&elf_phdr, elf_ehdr.e_phentsize);
     if (elf_phdr.p_type == PT_LOAD) {
