@@ -38,8 +38,8 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   int fd = fs_open(filename, 0, 0);
   fs_read(fd, &elf_ehdr, sizeof(Elf_Ehdr));
   for (size_t i = 0; i < elf_ehdr.e_phnum; i ++) {
-    fs_lseek(fd, elf_ehdr.e_phoff + i * sizeof(Elf_Phdr), SEEK_SET);
-    fs_read(fd, (void *)&elf_phdr, sizeof(Elf_Phdr));
+    fs_lseek(fd, elf_ehdr.e_phoff + i * elf_ehdr.e_phentsize, SEEK_SET);
+    fs_read(fd, (void *)&elf_phdr, elf_ehdr.e_phentsize);
     if (elf_phdr.p_type == PT_LOAD) {
       fs_lseek(fd, elf_phdr.p_offset, SEEK_SET);
       fs_read(fd, (void *)elf_phdr.p_vaddr, elf_phdr.p_filesz);
