@@ -1,4 +1,6 @@
 #include "fs.h"
+#include <sys/types.h>
+#include <unistd.h>
 
 extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 extern size_t ramdisk_write(const void *buf, size_t offset, size_t len);
@@ -91,6 +93,7 @@ off_t fs_lseek(int fd, off_t offset, int whence) {
       file_table[fd].open_offset = file_table[fd].size + offset; break;
     default: panic("trigger whence error");  
   }
+  return file_table[fd].open_offset;
 }
 
 int fs_close(int fd) {
