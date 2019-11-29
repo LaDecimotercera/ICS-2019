@@ -36,9 +36,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   Elf_Phdr elf_phdr;
   
   int fd = fs_open(filename, 0, 0);
-  if (fd == -1) {
-    assert(-1);  
-  }
+  
   fs_read(fd, &elf_ehdr, sizeof(Elf_Ehdr));
   for (size_t i = 0; i < elf_ehdr.e_phnum; i ++) {
     fs_lseek(fd, elf_ehdr.e_phoff + i * elf_ehdr.e_phentsize, SEEK_SET);
