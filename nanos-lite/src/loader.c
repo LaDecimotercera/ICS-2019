@@ -37,7 +37,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   
   int fd = fs_open(filename, 0, 0);
   if (fd == -1) {
-    panic("loader: can't open file %s!", filename);
+    assert(-1);  
   }
   fs_read(fd, &elf_ehdr, sizeof(Elf_Ehdr));
   for (size_t i = 0; i < elf_ehdr.e_phnum; i ++) {
