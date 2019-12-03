@@ -12,13 +12,26 @@ size_t serial_write(const void *buf, size_t offset, size_t len) {
 #define NAME(key) \
   [_KEY_##key] = #key,
 
+#define KEYDOWN_MASK 0x8000
+
 static const char *keyname[256] __attribute__((used)) = {
   [_KEY_NONE] = "NONE",
   _KEYS(NAME)
 };
 
 size_t events_read(void *buf, size_t offset, size_t len) {
-  return 0;
+  //Use the api of IOE to get input
+  int keycode = read_key();
+  if ((keycode & ~KEYDOWN_MASK) == _KEY_NONE) 
+    sprintf(buf, "t %d\n", uptime());
+  else if ((keycode & KEYDOWN_MASK) != 0) {
+    int key_code = keycode & ~KEYDOWN_MASK;
+    sprintf(buf, "kd %s\n", keyname[key_code]);
+  } else {
+    int key_code = keycode & ~KEYDOWN_MASK;
+    sprintf(buf, "ku %s\n", keyname[key_code]);
+  }
+  return strlen(buf);
 }
 
 static char dispinfo[128] __attribute__((used)) = {};
