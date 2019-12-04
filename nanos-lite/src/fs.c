@@ -57,7 +57,11 @@ int fs_open(const char *pathname, int flags, int mode) {
   }
 	panic("should not reach here(triggered by fs_open)");
 }
-
+void init_fs() {
+  // TODO: initialize the size of /dev/fb
+  int fd = fs_open("/dev/fb", 0, 0);
+  file_table[fd].size = screen_height() * screen_width() * sizeof(uint32_t);  
+}
 ssize_t fs_read(int fd, void *buf, size_t count) {
   assert(fd >= 0 && fd < NR_FILES);
   if (file_table[fd].read) {
@@ -105,10 +109,4 @@ off_t fs_lseek(int fd, off_t offset, int whence) {
 int fs_close(int fd) {
   file_table[fd].open_offset = 0;
   return 0;
-}
-
-void init_fs() {
-  // TODO: initialize the size of /dev/fb
-  int fd = fs_open("/dev/fb", 0, 0);
-  file_table[fd].size = screen_height() * screen_width() * sizeof(uint32_t);  
 }
