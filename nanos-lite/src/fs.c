@@ -54,14 +54,12 @@ void init_fs() {
 
 int fs_open(const char *pathname, int flags, int mode) {
   for(int i = 0; i < NR_FILES; i ++) {
-    if(strcmp(pathname, file_table[i].name) == 0) {
+    if(!strcmp(pathname, file_table[i].name)) {
       file_table[i].open_offset = 0;
       return i;
     }
   }
-	//panic("should not reach here(triggered by fs_open)");
-  assert(0);
-	return -1;
+	panic("should not reach here(triggered by fs_open)");
 }
 
 ssize_t fs_read(int fd, void *buf, size_t count) {
