@@ -59,7 +59,9 @@ int fs_open(const char *pathname, int flags, int mode) {
       return i;
     }
   }
-	panic("should not reach here(triggered by fs_open)");
+	//panic("should not reach here(triggered by fs_open)");
+  assert(0);
+	return -1;
 }
 
 ssize_t fs_read(int fd, void *buf, size_t count) {
