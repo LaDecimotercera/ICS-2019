@@ -22,10 +22,9 @@ static const char *keyname[256] __attribute__((used)) = {
 size_t events_read(void *buf, size_t offset, size_t len) {
   //Use the api of IOE to get input
   int keycode = read_key();
-  //if ((keycode & ~KEYDOWN_MASK) == _KEY_NONE) 
-  //  sprintf(buf, "t %d\n", uptime());
-  //else 
-  if ((keycode & KEYDOWN_MASK) != 0) {
+  if ((keycode & ~KEYDOWN_MASK) == _KEY_NONE) 
+    sprintf(buf, "t %d\n", uptime());
+  else if ((keycode & KEYDOWN_MASK) != 0) {
     int key_code = keycode & ~KEYDOWN_MASK;
     sprintf(buf, "kd %s\n", keyname[key_code]);
   } else {
