@@ -42,12 +42,12 @@ size_t get_dispinfo_size() {
 
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
   //fix
-  //if (offset + len > 128) len = 128 - offset;
-  //memcpy(buf, (void *)dispinfo + offset, len);
-  //((char*)buf)[len] = '\0';
-  //return len;
-  strncpy(buf, dispinfo + offset, len);
+  if (offset + len > 128) len = 128 - offset;
+  memcpy(buf, (void *)dispinfo + offset, len);
+  ((char*)buf)[len] = '\0';
   return len;
+  //strncpy(buf, dispinfo + offset, len);
+  //return len;
 }
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
