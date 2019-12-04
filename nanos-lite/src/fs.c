@@ -40,16 +40,25 @@ static Finfo file_table[] __attribute__((used)) = {
   {"stdout", 0, 0, 0, invalid_read, serial_write},
   {"stderr", 0, 0, 0, invalid_read, serial_write},
 #include "files.h"
-  {"/dev/events", 0, 0, 0, events_read, invalid_write},
+/*  {"/dev/events", 0, 0, 0, events_read, invalid_write},
   {"/dev/fbsync", 0, 0, 0, invalid_read, fbsync_write},
   {"/dev/dispinfo", 0, 0, 0, dispinfo_read, invalid_write},
-  {"/dev/fb", 0, 0, 0, invalid_read, fb_write},
+  {"/dev/fb", 0, 0, 0, invalid_read, fb_write},*/
+  {"/dev/events", 0, 0, 0, events_read, invalid_write},
+  //{"/dev/tty", 0, 0, 0, invalid_read, serial_write},
+  {"/proc/dispinfo", 0, 0, 0, dispinfo_read, invalid_write},
+  {"/dev/fbsync", 0, 0, 0, invalid_read, fbsync_write},
+  {"/dev/fb", 0, 0, 0, invalid_read, fb_write}, 
 };
 
 #define NR_FILES (sizeof(file_table) / sizeof(file_table[0]))
 void init_fs() {
   // TODO: initialize the size of /dev/fb
-  file_table[NR_FILES - 1].size = screen_height() * screen_width() * sizeof(uint32_t);
+  //file_table[NR_FILES - 1].size = screen_height() * screen_width() * sizeof(uint32_t);
+  file_table[NR_FILES - 1].size = screen_width() * screen_height() * 4;
+  file_table[NR_FILES - 2].size = 1;
+  extern size_t get_dispinfo_size();
+  file_table[NR_FILES - 3].size = get_dispinfo_size();
 }
 
 int fs_open(const char *pathname, int flags, int mode) {

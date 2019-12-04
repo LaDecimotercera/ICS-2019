@@ -36,6 +36,10 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 
 static char dispinfo[128] __attribute__((used)) = {};
 
+size_t get_dispinfo_size() {
+  return strlen(dispinfo);
+}
+
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
   //fix
   //if (offset + len > 128) len = 128 - offset;
@@ -47,11 +51,18 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 }
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
-  int x = (offset / sizeof(uint32_t)) % screen_width();
+  /*int x = (offset / sizeof(uint32_t)) % screen_width();
   int y = (offset / sizeof(uint32_t)) / screen_width();
   int w = len / sizeof(uint32_t);
   int h = 1; 
   draw_rect((uint32_t *)buf, x, y, w, h);
+  return len;*/
+  int x, y;
+  assert(offset + len <= (size_t)screen_height() * screen_width() * 4);
+  x = (offset / 4) % screen_width();
+  y = (offset / 4) / screen_width();
+  assert(x + len < (size_t)screen_width() * 4);
+  draw_rect((void *)buf, x, y, len / 4, 1);
   return len;
 }
 
