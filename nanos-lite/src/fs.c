@@ -41,12 +41,16 @@ static Finfo file_table[] __attribute__((used)) = {
   {"stderr", 0, 0, 0, invalid_read, serial_write},
 #include "files.h"
   {"/dev/events", 0, 0, 0, events_read, invalid_write},
-  {"/dev/fb", 0, 0, 0, invalid_read, fb_write},
   {"/dev/fbsync", 0, 0, 0, invalid_read, fbsync_write},
   {"/dev/dispinfo", 0, 0, 0, dispinfo_read, invalid_write},
+  {"/dev/fb", 0, 0, 0, invalid_read, fb_write},//must placed at last
 };
 
 #define NR_FILES (sizeof(file_table) / sizeof(file_table[0]))
+void init_fs() {
+  // TODO: initialize the size of /dev/fb
+  file_table[NR_FILES - 1].size = screen_height() * screen_width() * sizeof(uint32_t);
+}
 
 int fs_open(const char *pathname, int flags, int mode) {
   for(int i = 0; i < NR_FILES; i ++) {
@@ -57,11 +61,7 @@ int fs_open(const char *pathname, int flags, int mode) {
   }
 	panic("should not reach here(triggered by fs_open)");
 }
-void init_fs() {
-  // TODO: initialize the size of /dev/fb
-  int fd = fs_open("/dev/fb", 0, 0);
-  file_table[fd].size = screen_height() * screen_width() * sizeof(uint32_t);  
-}
+
 ssize_t fs_read(int fd, void *buf, size_t count) {
   assert(fd >= 0 && fd < NR_FILES);
   if (file_table[fd].read) {
