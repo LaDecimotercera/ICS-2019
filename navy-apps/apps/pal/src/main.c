@@ -184,7 +184,7 @@ PAL_Shutdown(
 --*/
 {
    SOUND_CloseAudio();
-	Log("SOUND_CloseAudio success");
+	printf("SOUND_CloseAudio success");
    PAL_FreeFont();
 	Log("PAL_FreeFont success");
    PAL_FreeResources();
