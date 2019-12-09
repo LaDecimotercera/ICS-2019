@@ -99,7 +99,7 @@ _Context *_ucontext(_AddressSpace *as, _Area ustack, _Area kstack, void *entry, 
 
 	tmp->cs = 8;
 	tmp->eip = (uintptr_t)(entry);
-	tmp->esp = tmp->ebp = (uintptr_t)(ustack.end);
+	//tmp->esp = tmp->ebp = (uintptr_t)(ustack.end);
 	
   return tmp;
   //return NULL;
