@@ -13,7 +13,7 @@ __am_asm_trap:
   call __am_irq_handle
 
   addl $4, %esp
-  movl %eax, %esp #modified in PA 4.1
+  movl %eax, %esp
   
   addl $4, %esp
   popal
