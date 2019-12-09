@@ -9,7 +9,7 @@ PCB *current = NULL;
 extern void naive_uload(PCB *pcb, const char *filename);
 extern void context_kload(PCB *pcb, void *entry);
 extern void context_uload(PCB *pcb, const char *filename);
-extern _Context *_ucontext(_AddressSpace *as, _Area ustack, _Area kstack, void *entry, void *args);
+
 void switch_boot_pcb() {
   current = &pcb_boot;
 }

@@ -114,7 +114,7 @@ _Context *_ucontext(_AddressSpace *as, _Area ustack, _Area kstack, void *entry, 
   sf->argv = NULL;
   sf->envp = NULL;
 
-  //cp->prot = p;
+  cp->as = as;
   cp->eip = (uintptr_t) entry;
   cp->cs = 0x8; 
   cp->esp = (uintptr_t)((void*)cp + sizeof(struct _Protect*) + 3 * sizeof(uintptr_t));
