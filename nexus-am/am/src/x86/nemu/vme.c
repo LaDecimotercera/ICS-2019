@@ -84,7 +84,7 @@ int _map(_AddressSpace *as, void *va, void *pa, int prot) {
 }
 
 _Context *_ucontext(_AddressSpace *as, _Area ustack, _Area kstack, void *entry, void *args) {
-  typedef struct {
+  /*typedef struct {
     int argc;
     char** argv;
     char** envp;
@@ -99,8 +99,27 @@ _Context *_ucontext(_AddressSpace *as, _Area ustack, _Area kstack, void *entry, 
 
 	tmp->cs = 8;
 	tmp->eip = (uintptr_t)(entry);
-	//tmp->esp = tmp->ebp = (uintptr_t)(ustack.end);
-	
-  return tmp;
+	tmp->esp = tmp->ebp = (uintptr_t)(ustack.end);
+  return tmp;*/
+  typedef struct {
+    int argc;
+    char** argv;
+    char** envp;
+  } StackFrame;
+
+  _Context *cp = (_Context*) (ustack.end - sizeof(StackFrame) - sizeof(_Context));
+  StackFrame *sf = (StackFrame*) (ustack.end - sizeof(StackFrame)); 
+
+  sf->argc = 0;
+  sf->argv = NULL;
+  sf->envp = NULL;
+
+  //cp->prot = p;
+  cp->eip = (uintptr_t) entry;
+  cp->cs = 0x8; 
+  cp->esp = (uintptr_t)((void*)cp + sizeof(struct _Protect*) + 3 * sizeof(uintptr_t));
+  cp->eflags |= 0x200;
+
+  return cp; 
   //return NULL;
 }
