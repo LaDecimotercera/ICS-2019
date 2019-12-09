@@ -1,7 +1,7 @@
 #include <am.h>
 #include <x86.h>
 #include <nemu.h>
-#include <string.h>
+//#include <klib.h>
 
 #define PG_ALIGN __attribute((aligned(PGSIZE)))
 
@@ -94,17 +94,5 @@ _Context *_ucontext(_AddressSpace *as, _Area ustack, _Area kstack, void *entry, 
 	tmp->esp = tmp->ebp = (uintptr_t)(ustack.end);
 	
   return tmp;*/
-  void* start_frame = ustack.end - 3 * sizeof(void*);
-	//memset(start_frame, 0, sizeof(void*) * 3);
-	_Context *cont = (_Context*)(start_frame - sizeof(_Context));
-	cont->cs = 8;
-	cont->eip = (uintptr_t)(entry);
-	cont->esp = cont->ebp = (uintptr_t)(ustack.end);
-	cont->edi = cont->esi = cont->ebx = cont->ecx = cont->eax = 0;
-	cont->irq = 0x81;
-	cont->eflags = 0;
-	cont->eflags |= (1 << 9); //set IF
-	
-  return cont;
-  //return NULL;
+  return NULL;
 }
