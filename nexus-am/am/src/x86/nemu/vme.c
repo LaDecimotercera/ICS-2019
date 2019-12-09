@@ -1,7 +1,6 @@
 #include <am.h>
 #include <x86.h>
 #include <nemu.h>
-#include <string.h>
 
 #define PG_ALIGN __attribute((aligned(PGSIZE)))
 
@@ -85,10 +84,19 @@ int _map(_AddressSpace *as, void *va, void *pa, int prot) {
 }
 
 _Context *_ucontext(_AddressSpace *as, _Area ustack, _Area kstack, void *entry, void *args) {
-  _Context *start_frame = (_Context*)ustack.end - 3 * sizeof(void*);
-	//memset(start_frame, 0, sizeof(void*) * 3);
-	
-  _Context *tmp = (_Context*)(start_frame - sizeof(_Context));
+  typedef struct {
+    int argc;
+    char** argv;
+    char** envp;
+  } StackFrame;
+
+  StackFrame *stackframe = (StackFrame*) (ustack.end - sizeof(StackFrame));
+  _Context *tmp = (_Context*)(ustack.end - sizeof(StackFrame) - sizeof(_Context));
+
+  stackframe->argc = 0;
+  stackframe->argv = NULL;
+  stackframe->envp = NULL;
+
 	tmp->cs = 8;
 	tmp->eip = (uintptr_t)(entry);
 	tmp->esp = tmp->ebp = (uintptr_t)(ustack.end);
