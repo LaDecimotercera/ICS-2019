@@ -54,8 +54,8 @@ _Context *_kcontext(_Area stack, void (*entry)(void *), void *arg) {
   _Context *tmp = (_Context*) (stack.end - sizeof(_Context));
   tmp->cs = 8;  
   tmp->eip = (uintptr_t)entry;
-
-  return tmp; 
+  tmp->esp = tmp->ebp = (uintptr_t)stack.end;
+  return tmp;
 }
 
 void _yield() {
