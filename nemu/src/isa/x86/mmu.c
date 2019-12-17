@@ -21,7 +21,7 @@
 // +----------------+----------------+---------------------+
 //  \--- PDX(va) --/ \--- PTX(va) --/\------ OFF(va) ------/
 
-paddr_t page_translate(vaddr_t vaddr) {
+paddr_t page_translate(vaddr_t va) {
   /*paddr_t dir = PDX(addr);
   paddr_t page = PTX(addr);
   paddr_t offset = OFF(addr);
@@ -33,13 +33,20 @@ paddr_t page_translate(vaddr_t vaddr) {
   paddr_t PF_base = PTE_ADDR(paddr_read(PTE_base + PTX(addr) * sizeof(PTE), sizeof(PTE)));
   paddr_t paddr = PF_base | OFF(addr);
   return paddr;*/
-  paddr_t dir = PTE_ADDR(cpu.cr3.val);
-  assert(paddr_read(dir + sizeof(paddr_t) * PDX(vaddr), sizeof(paddr_t)) & PTE_P);
-  paddr_t pg = PTE_ADDR(paddr_read(dir + sizeof(paddr_t) * PDX(vaddr), sizeof(paddr_t)));
-  assert(paddr_read(pg + sizeof(paddr_t) * PTX(vaddr), sizeof(paddr_t)) & PTE_P);
-  
-  //Log("Page translate paddr: 0x%08x", PTE_ADDR(paddr_read(pg + sizeof(paddr_t) * PTX(vaddr), sizeof(paddr_t))) | OFF(vaddr));
-  return (PTE_ADDR(paddr_read(pg + sizeof(paddr_t) * PTX(vaddr), sizeof(paddr_t))) | OFF(vaddr));
+  paddr_t ptab = paddr_read(cpu.cr3.val + sizeof(PDE) * PDX(va), sizeof(PDE));
+  if (!(ptab & PTE_P)) {
+    printf("ERROR:page_translate(): page table doesn't exists!\n");
+    assert(0); 
+  }
+
+  // 注意这里从页目录中读出来的并不是真正的页表指针，需要将后面的标志位屏蔽掉！
+  paddr_t pg = paddr_read(PTE_ADDR(ptab) + sizeof(PTE) * PTX(va), sizeof(PTE));
+  if (!(pg & PTE_P)) {
+    printf("ERROR:page_translate(): page doesn't exists!\n");
+    assert(0); 
+  }
+
+  return (PTE_ADDR(pg) | OFF(va));
 }
 
 uint32_t isa_vaddr_read(vaddr_t addr, int len) {
