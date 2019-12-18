@@ -1,6 +1,7 @@
 #include <am.h>
 #include <x86.h>
 #include <nemu.h>
+#include <klib.h>
 
 #define PG_ALIGN __attribute((aligned(PGSIZE)))
 
@@ -80,7 +81,7 @@ void __am_switch(_Context *c) {
 }
 
 int _map(_AddressSpace *as, void *va, void *pa, int prot) {
-  PDE *updir = (PDE *)(as->ptr);
+  /*PDE *updir = (PDE *)(as->ptr);
   PDE pde = updir[PDX(va)];
   if (!(pde & PTE_P)) {
     PTE *new_page = (PTE *)pgalloc_usr(1);
@@ -94,11 +95,28 @@ int _map(_AddressSpace *as, void *va, void *pa, int prot) {
     ((PTE *)PTE_ADDR(pde))[PTX(va)] = pte; 
   }
 
+  return 0;*/
+  PTE *pdir = (as == NULL) ? (void *)get_cr3() : (void *)as->ptr;
+  PDE *pptab = &pdir[PDX(va)];
+
+  if (!(*pptab & PTE_P)) {  // 如果页表不存在则分配一个页目录
+    *pptab = (uint32_t)pgalloc_usr(1);
+    memset((void *)*pptab, 0, PGSIZE);
+    *pptab = *pptab | PTE_P;
+  }
+
+  PDE *ptab = &(((PDE *)PTE_ADDR(*pptab))[PTX(va)]);
+  if (*ptab & PTE_P) {  // 如果页已经存在则报错
+    printf("ERROR:vme _map(): page map already exists! %x\n", *ptab);
+    assert(0); 
+  }
+  *ptab = PTE_ADDR(pa) | PTE_P;
+
   return 0;
 }
 
 _Context *_ucontext(_AddressSpace *as, _Area ustack, _Area kstack, void *entry, void *args) {
-  typedef struct {
+  /*typedef struct {
     int argc;
     char** argv;
     char** envp;
@@ -116,6 +134,15 @@ _Context *_ucontext(_AddressSpace *as, _Area ustack, _Area kstack, void *entry, 
 	tmp->esp = tmp->ebp = (uintptr_t)(ustack.end);
   tmp->as = as;
   
-  return tmp;
+  return tmp;*/
   //return NULL;
+  _Context *context = ustack.end - sizeof(_Context) - 0x20;
+  memset(context, 0x00, sizeof(_Context) + 0x20);
+  context->cs = 8;
+  context->eip = (uint32_t)entry;
+  //context->eflags->val = 0x02;
+  context->as = as;
+  //context->eflags->IF = 1;
+
+  return context;
 }
