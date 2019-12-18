@@ -28,9 +28,9 @@ paddr_t page_translate(vaddr_t addr) {
   paddr_t PDT_base = cpu.cr3.page_directory_base;*/
   
   paddr_t PDT_base = PTE_ADDR(cpu.cr3.val);
-  //assert(paddr_read(PDT_base + PDX(addr) * sizeof(PDE), sizeof(PDE)) & PTE_P);
+  assert(paddr_read(PDT_base + PDX(addr) * sizeof(PDE), sizeof(PDE)) & PTE_P);
   paddr_t PTE_base = PTE_ADDR(paddr_read(PDT_base + PDX(addr) * sizeof(PDE), sizeof(PDE))); 
-  //assert(paddr_read(PTE_base + PTX(addr) * sizeof(PTE), sizeof(PTE)) & PTE_P);
+  assert(paddr_read(PTE_base + PTX(addr) * sizeof(PTE), sizeof(PTE)) & PTE_P);
   paddr_t PF_base = PTE_ADDR(paddr_read(PTE_base + PTX(addr) * sizeof(PTE), sizeof(PTE)));
   paddr_t paddr = PF_base | OFF(addr);
   return paddr;
