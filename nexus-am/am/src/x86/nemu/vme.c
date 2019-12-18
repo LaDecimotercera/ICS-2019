@@ -80,6 +80,20 @@ void __am_switch(_Context *c) {
 }
 
 int _map(_AddressSpace *as, void *va, void *pa, int prot) {
+  PDE *updir = (PDE *)(as->ptr);
+  PDE pde = updir[PDX(va)];
+  if (!(pde & PTE_P)) {
+    PTE *new_page = (PTE *)pgalloc_usr(1);
+    pde = PTE_ADDR(new_page) | PTE_P;
+    updir[PDX(va)] = pde;
+  }
+  PTE pte = ((PTE *)PTE_ADDR(pde))[PTX(va)];
+  if (!(pte & PTE_P))
+  {
+    pte = PTE_ADDR(pa) | PTE_P;
+    ((PTE *)PTE_ADDR(pde))[PTX(va)] = pte; 
+  }
+
   return 0;
 }
 
