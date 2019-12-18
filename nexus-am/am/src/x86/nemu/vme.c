@@ -96,37 +96,27 @@ int _map(_AddressSpace *as, void *va, void *pa, int prot) {
   }
 
   return 0;*/
-  // 获取页目录表基址
-  PDE *updir = (PDE *) (as->ptr);
-  intptr_t vaddr = (intptr_t) va;
-  // 获取va对应页目录项
-  PDE pde = updir[PDX(vaddr)];
+  PTE *pdir = (as == NULL) ? (void *)get_cr3() : (void *)as->ptr;
+  PDE *pptab = &pdir[PDX(va)];
 
-  // 判断页目录项pde对应物理页是否可用
-  if ((pde & PTE_P) == 0) {// 不可用
-	// 申请新的物理页
-    PTE *new = (PTE *)(pgalloc_usr(1));
-	// 把该物理页赋给该页目录项
-    pde = ((PDE)new & 0xfffff000) | PTE_P;
-	// 更新页目录项
-    updir[PDX(vaddr)] = pde;
+  if (!(*pptab & PTE_P)) {  // 如果页表不存在则分配一个页目录
+    *pptab = (uint32_t)pgalloc_usr(1);
+    memset((void *)*pptab, 0, PGSIZE);
+    *pptab = *pptab | PTE_P;
   }
 
-  // 获取页表基址
-  PTE *upt = (PTE *)(((pde >> 12) & 0xfffff) << 12);
-  // 获取页表项
-  PTE pte = upt[PTX(vaddr)];
-  // 判断页表项pte对应物理页是否可用
-  if ((pte & PTE_P) == 0) {// 不可用
-    // 使用物理页pa更新页表项
-    upt[PTX(vaddr)] = ((PTE)pa & 0xfffff000) | PTE_P;
+  PDE *ptab = &(((PDE *)PTE_ADDR(*pptab))[PTX(va)]);
+  if (*ptab & PTE_P) {  // 如果页已经存在则报错
+    printf("ERROR:vme _map(): page map already exists! %x\n", *ptab);
+    assert(0); 
   }
+  *ptab = PTE_ADDR(pa) | PTE_P;
 
   return 0;
 }
 
 _Context *_ucontext(_AddressSpace *as, _Area ustack, _Area kstack, void *entry, void *args) {
-  /*typedef struct {
+  typedef struct {
     int argc;
     char** argv;
     char** envp;
@@ -144,15 +134,6 @@ _Context *_ucontext(_AddressSpace *as, _Area ustack, _Area kstack, void *entry, 
 	tmp->esp = tmp->ebp = (uintptr_t)(ustack.end);
   tmp->as = as;
   
-  return tmp;*/
+  return tmp;
   //return NULL;
-  _Context *context = ustack.end - sizeof(_Context) - 0x20;
-  memset(context, 0x00, sizeof(_Context) + 0x20);
-  context->cs = 8;
-  context->eip = (uint32_t)entry;
-  //context->eflags->val = 0x02;
-  context->as = as;
-  //context->eflags->IF = 1;
-
-  return context;
 }
