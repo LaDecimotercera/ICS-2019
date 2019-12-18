@@ -21,18 +21,27 @@
 // +----------------+----------------+---------------------+
 //  \--- PDX(va) --/ \--- PTX(va) --/\------ OFF(va) ------/
 
-paddr_t page_translate(vaddr_t addr) {
+paddr_t page_translate(vaddr_t vaddr) {
   /*paddr_t dir = PDX(addr);
   paddr_t page = PTX(addr);
   paddr_t offset = OFF(addr);
   paddr_t PDT_base = cpu.cr3.page_directory_base;*/
-  paddr_t PDT_base = PTE_ADDR(cpu.cr3.val);
+  
+  /*paddr_t PDT_base = PTE_ADDR(cpu.cr3.val);
   assert(paddr_read(PDT_base + PDX(addr) * sizeof(PDE), sizeof(PDE)) & PTE_P);
   paddr_t PTE_base = PTE_ADDR(paddr_read(PDT_base + PDX(addr) * sizeof(PDE), sizeof(PDE))); 
   assert(paddr_read(PTE_base + PTX(addr) * sizeof(PTE), sizeof(PTE)) & PTE_P);
   paddr_t PF_base = PTE_ADDR(paddr_read(PTE_base + PTX(addr) * sizeof(PTE), sizeof(PTE)));
   paddr_t paddr = PF_base | OFF(addr);
-  return paddr;
+  return paddr;*/
+  paddr_t dir = PTE_ADDR(cpu.cr3.val);
+  assert(paddr_read(dir + sizeof(paddr_t) * PDX(vaddr), sizeof(paddr_t)) & PTE_P);
+  
+  paddr_t pg = PTE_ADDR(paddr_read(dir + sizeof(paddr_t) * PDX(vaddr), sizeof(paddr_t)));
+  assert(paddr_read(pg + sizeof(paddr_t) * PTX(vaddr), sizeof(paddr_t)) & PTE_P);
+  
+  //Log("Page translate paddr: 0x%08x", PTE_ADDR(paddr_read(pg + sizeof(paddr_t) * PTX(vaddr), sizeof(paddr_t))) | OFF(vaddr));
+  return (PTE_ADDR(paddr_read(pg + sizeof(paddr_t) * PTX(vaddr), sizeof(paddr_t))) | OFF(vaddr)); 
 }
 
 uint32_t isa_vaddr_read(vaddr_t addr, int len) {
