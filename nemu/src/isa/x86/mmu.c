@@ -36,14 +36,14 @@ paddr_t page_translate(vaddr_t va) {
   return paddr;*/
   paddr_t ptab = paddr_read(cpu.cr3.val + sizeof(PDE) * PDX(va), sizeof(PDE));
   if (!(ptab & PTE_P)) {
-    printf("ERROR:page_translate(): page table doesn't exists!\n");
+    //printf("ERROR:page_translate(): page table doesn't exists!\n");
     assert(0); 
   }
 
   // 注意这里从页目录中读出来的并不是真正的页表指针，需要将后面的标志位屏蔽掉！
   paddr_t pg = paddr_read(PTE_ADDR(ptab) + sizeof(PTE) * PTX(va), sizeof(PTE));
   if (!(pg & PTE_P)) {
-    printf("ERROR:page_translate(): page doesn't exists!\n");
+    //printf("ERROR:page_translate(): page doesn't exists!\n");
     assert(0); 
   }
 
