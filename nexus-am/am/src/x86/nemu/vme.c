@@ -108,7 +108,7 @@ int _map(_AddressSpace *as, void *va, void *pa, int prot) {
   PDE *ptab = &(((PDE *)PTE_ADDR(*pptab))[PTX(va)]);
   if (*ptab & PTE_P) {  // 如果页已经存在则报错
     printf("ERROR:vme _map(): page map already exists! %x\n", *ptab);
-    assert(0); 
+    //assert(0); 
   }
   *ptab = PTE_ADDR(pa) | PTE_P;
 
