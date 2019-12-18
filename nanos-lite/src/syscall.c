@@ -11,7 +11,7 @@ extern ssize_t fs_write(int fd, const void *buf, size_t count);
 extern int fs_close(int fd);
 extern off_t fs_lseek(int fd, off_t offset, int whence);
 extern void naive_uload(PCB *pcb, const char *filename);
-extern int mm_brk(uintptr_t brk, intptr_t increment);
+extern int mm_brk(uintptr_t new_brk);
 /*static inline size_t sys_write(int fd, void *buf, size_t count){
   if (fd == 1 || fd == 2){
     char ch[count];
@@ -35,7 +35,7 @@ _Context* do_syscall(_Context *c) {
     case SYS_yield: _yield(); c->GPRx = 0; break;
     case SYS_exit: _halt(a[1]); break;//naive_uload(NULL, "/bin/init"); break;
     case SYS_write: c->GPRx = fs_write(a[1], (void *)a[2], a[3]); break; 
-    case SYS_brk: c->GPRx = mm_brk(a[1],a[2]); break;
+    case SYS_brk: c->GPRx = mm_brk(a[1]); break;
     case SYS_open: c->GPRx = fs_open((const char *)a[1],a[2],a[3]); break;
     case SYS_read: c->GPRx = fs_read(a[1], (void *)a[2], a[3]); break;
     case SYS_close: c->GPRx = fs_close(a[1]); break;
