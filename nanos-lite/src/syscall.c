@@ -33,7 +33,7 @@ _Context* do_syscall(_Context *c) {
 
   switch (a[0]) {
     case SYS_yield: _yield(); c->GPRx = 0; break;
-    case SYS_exit: naive_uload(NULL, "/bin/init"); break;
+    case SYS_exit: _halt(a[1]); break;//naive_uload(NULL, "/bin/init"); break;
     case SYS_write: c->GPRx = fs_write(a[1], (void *)a[2], a[3]); break; 
     case SYS_brk: c->GPRx = 0; break;
     case SYS_open: c->GPRx = fs_open((const char *)a[1],a[2],a[3]); break;
