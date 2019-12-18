@@ -26,14 +26,35 @@ paddr_t page_translate(vaddr_t addr) {
   paddr_t page = PTX(addr);
   paddr_t offset = OFF(addr);
   paddr_t PDT_base = cpu.cr3.page_directory_base;*/
-  
-  paddr_t PDT_base = PTE_ADDR(cpu.cr3.val);
+  /*paddr_t PDT_base = PTE_ADDR(cpu.cr3.val);
   assert(paddr_read(PDT_base + PDX(addr) * sizeof(PDE), sizeof(PDE)) & PTE_P);
   paddr_t PTE_base = PTE_ADDR(paddr_read(PDT_base + PDX(addr) * sizeof(PDE), sizeof(PDE))); 
   assert(paddr_read(PTE_base + PTX(addr) * sizeof(PTE), sizeof(PTE)) & PTE_P);
   paddr_t PF_base = PTE_ADDR(paddr_read(PTE_base + PTX(addr) * sizeof(PTE), sizeof(PTE)));
   paddr_t paddr = PF_base | OFF(addr);
-  return paddr;
+  return paddr;*/
+  uint32_t pdx = (addr >> 22) & 0x3ff;
+  uint32_t ptx = (addr >> 12) & 0x3ff;
+  uint32_t off = (addr) & 0xfff;
+
+  //printf("page_translate: cpu.cr3.val:%#x\n", cpu.cr3.val);
+  //printf("page_translate: addr:%#x\n", addr);
+
+  uint32_t pde = paddr_read(cpu.cr3.val+pdx*4, 4);
+  Assert(pde&1, "page_translate: the P of pde is 0.\taddr:%#x\tpde:%#x\n", addr, pde);
+  uint32_t pte = paddr_read((pde&(~0xfff))+ptx*4, 4);
+  Assert(pte&1, "page_translate: the P of pte is 0.\taddr:%#x\tpde:%#x\tpte:%#x\n",
+         addr, pde, pte);
+  /*
+  printf("page_translate:\taddr:%#x\tpde:%#x\tpte:%#x\treturn:%#x\n",
+          addr, pde, pte, (paddr_t)((pte&(~0xfff))+off));
+  */
+  /*
+  Assert(addr == (paddr_t)((pte&(~0xfff))+off),
+          "page_translate: Maybe something wrong.\naddr:%#x\tpde:%#x\tpte:%#x\treturn:%#x\n",
+          addr, pde, pte, (paddr_t)((pte&(~0xfff))+off));
+  */
+  return (paddr_t)((pte&(~0xfff))+off);
 }
 
 uint32_t isa_vaddr_read(vaddr_t addr, int len) {
