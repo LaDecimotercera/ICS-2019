@@ -21,10 +21,15 @@ int mm_brk(uintptr_t brk, intptr_t increment) {
     current->max_brk = new_brk;
   } else {
     if (new_brk > current->max_brk) {
-      uintptr_t pg_start = PGROUNDUP(current->max_brk);
-      uintptr_t pg_end = PGROUNDUP(new_brk);
-      for (; pg_start <= pg_end; pg_start += PGSIZE) {
-        _map(&current->as, (void *)pg_start, new_page(1), 0);
+      //uintptr_t pg_start = PGROUNDUP(current->max_brk);
+      //uintptr_t pg_end = PGROUNDUP(new_brk);
+      uintptr_t va;
+      if (current->max_brk % PGSIZE == 0)
+        va = current->max_brk;
+      else
+        va = (current->max_brk / PGSIZE + 1)*PGSIZE;
+      for (; va <= new_brk; va += PGSIZE) {
+        _map(&current->as, (void *)va, new_page(1), 0);
       }
       current->max_brk = new_brk;
     }
