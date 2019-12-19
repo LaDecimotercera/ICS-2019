@@ -34,7 +34,14 @@ paddr_t page_translate(vaddr_t addr) {
 uint32_t isa_vaddr_read(vaddr_t addr, int len) {
   if (cpu.cr0.paging == 1) {
     if (PTE_ADDR(addr) != PTE_ADDR(addr + len - 1)) {
-      assert(0);
+      //assert(0);
+      uint8_t byte[4];
+      for (int i = 0; i < len; i++)
+        byte[i] = isa_vaddr_read(addr + i, 1);
+      if (len == 2)
+        return *(uint16_t *)byte;
+      else
+        return *(uint32_t *)byte;
     }
     else {
       paddr_t paddr = page_translate(addr);
@@ -47,7 +54,14 @@ uint32_t isa_vaddr_read(vaddr_t addr, int len) {
 void isa_vaddr_write(vaddr_t addr, uint32_t data, int len) {
   if (cpu.cr0.paging == 1) {
     if (PTE_ADDR(addr) != PTE_ADDR(addr + len - 1)) {
-      assert(0);
+      //assert(0);
+      uint8_t byte[4];
+      if (len == 2)
+        *(uint16_t *)byte = data;
+      else
+        *(uint32_t *)byte = data;
+      for (int i = 0; i < len; i++)
+        isa_vaddr_write(addr + i, byte[i], 1);
     } 
     else {
       paddr_t paddr = page_translate(addr);
