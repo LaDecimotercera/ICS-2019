@@ -5,7 +5,7 @@
 static PCB pcb[MAX_NR_PROC] __attribute__((used)) = {};
 static PCB pcb_boot = {};
 PCB *current = NULL;
-int fg_pcb = 0;
+int fg_pcb;
 
 extern void naive_uload(PCB *pcb, const char *filename);
 extern void context_kload(PCB *pcb, void *entry);
@@ -32,6 +32,7 @@ void init_proc() {
   
   // load program here
   //naive_uload(NULL, "/bin/dummy");
+  fg_pcb = 0;
   context_uload(&pcb[0], "/bin/hello");
   //switch_boot_pcb();
   context_uload(&pcb[1], "/bin/pal");
