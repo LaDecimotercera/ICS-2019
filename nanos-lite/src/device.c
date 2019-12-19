@@ -1,5 +1,6 @@
 #include "common.h"
 #include <amdev.h>
+#include "proc.h"
 
 size_t serial_write(const void *buf, size_t offset, size_t len) {
   //_yield();
@@ -24,9 +25,16 @@ size_t events_read(void *buf, size_t offset, size_t len) {
   int keycode = read_key();
   if ((keycode & ~KEYDOWN_MASK) == _KEY_NONE) 
     sprintf(buf, "t %d\n", uptime());
-  else if ((keycode & KEYDOWN_MASK) != 0) {
+  else if ((keycode & KEYDOWN_MASK) != _KEY_NONE) {
     int key_code = keycode & ~KEYDOWN_MASK;
     sprintf(buf, "kd %s\n", keyname[key_code]);
+    switch (key_code)
+    {
+    case _KEY_F1: fg_pcb = 1; break;
+    case _KEY_F2: fg_pcb = 2; break;
+    case _KEY_F3: fg_pcb = 3; break;
+    default: break;
+    }
   } else {
     int key_code = keycode & ~KEYDOWN_MASK;
     sprintf(buf, "ku %s\n", keyname[key_code]);
