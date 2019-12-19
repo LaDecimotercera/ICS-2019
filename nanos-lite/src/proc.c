@@ -24,16 +24,16 @@ void hello_fun(void *arg) {
 }
 
 void init_proc() {
-  switch_boot_pcb();
+  //switch_boot_pcb();
 
-  Log("Initializing processes...");
-  context_uload(&pcb[0], "/bin/pal");
+  //Log("Initializing processes...");
+  //context_uload(&pcb[0], "/bin/pal");
   
   // load program here
   //naive_uload(NULL, "/bin/dummy");
-  /*context_uload(&pcb[1], "/bin/init");
+  context_uload(&pcb[0], "/bin/pal");
   switch_boot_pcb();
-  context_kload(&pcb[0], (void *)hello_fun);*/
+  context_uload(&pcb[1], "/bin/hello");
 }
 
 _Context* schedule(_Context *prev) {
