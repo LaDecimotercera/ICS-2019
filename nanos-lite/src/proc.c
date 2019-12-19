@@ -32,7 +32,7 @@ void init_proc() {
   
   // load program here
   //naive_uload(NULL, "/bin/dummy");
-  fg_pcb = 0;
+  fg_pcb = 1;
   context_uload(&pcb[0], "/bin/pal"); 
   context_uload(&pcb[1], "/bin/pal");
   context_uload(&pcb[2], "/bin/pal");
