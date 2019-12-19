@@ -1,5 +1,7 @@
 #include "cpu/exec.h"
 
+extern bool isa_query_intr(void);
+
 CPU_state cpu;
 
 rtlreg_t s0, s1, t0, t1, ir;
@@ -17,6 +19,6 @@ vaddr_t exec_once(void) {
   decinfo.seq_pc = cpu.pc;
   isa_exec(&decinfo.seq_pc);
   update_pc();
-
+  if (isa_query_intr()) update_pc();
   return decinfo.seq_pc;
 }
