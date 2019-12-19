@@ -9,7 +9,7 @@ extern int fs_open(const char *pathname, int flags, int mode);
 extern ssize_t fs_read(int fd, void *buf, size_t count);
 extern ssize_t fs_write(int fd, const void *buf, size_t count);
 extern int fs_close(int fd);
-extern off_t fs_lseek(int fd, off_t offset, int whence);
+extern off_t fs_lseek(int fd, off_t                                      offset, int whence);
 extern void naive_uload(PCB *pcb, const char *filename);
 extern int mm_brk(uintptr_t brk, intptr_t increment);
 /*static inline size_t sys_write(int fd, void *buf, size_t count){
