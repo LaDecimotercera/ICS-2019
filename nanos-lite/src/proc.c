@@ -32,11 +32,13 @@ void init_proc() {
   
   // load program here
   //naive_uload(NULL, "/bin/dummy");
-  fg_pcb = 1;
+  /*fg_pcb = 1;
   context_uload(&pcb[0], "/bin/hello"); 
   context_uload(&pcb[1], "/bin/pal");
   context_uload(&pcb[2], "/bin/pal");
-  context_uload(&pcb[3], "/bin/pal");
+  context_uload(&pcb[3], "/bin/pal");*/
+  context_uload(&pcb[0], "/bin/hello");
+  context_uload(&pcb[1], "/bin/dummy");
   switch_boot_pcb();
 }
 
@@ -46,7 +48,7 @@ _Context* schedule(_Context *prev) {
   current->cp = prev;
 
   // always select pcb[0] as the new process
-  current = (current == &pcb[0] ? &pcb[fg_pcb] : &pcb[0]);
+  current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
   //current = &pcb[0];
   // then return the new context
   return current->cp;
