@@ -6,6 +6,8 @@
 
 #define STACK_SIZE (8 * PGSIZE)
 
+extern int fg_pcb;
+
 typedef union {
   uint8_t stack[STACK_SIZE] PG_ALIGN;
   struct {

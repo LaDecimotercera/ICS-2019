@@ -45,7 +45,7 @@ typedef union PageDirectoryEntry {
     uint32_t pad0                : 6;
     uint32_t page_frame          : 20;
   };
-  uint32_t val;
+  uint32_t val; 
 } PDE;
 
 /* the 32bit Page Table Entry(second level page table) data structure */

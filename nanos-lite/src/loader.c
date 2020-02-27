@@ -11,6 +11,10 @@
 # define Elf_Phdr Elf32_Phdr
 #endif
 
+#define min(x, y)         ((x) < (y) ? (x) : (y))
+#define PTE_ADDR(pte)     ((uint32_t)(pte) & ~0xfff)
+#define OFF(va)           ((uint32_t)(va) & 0xfff)
+
 extern size_t ramdisk_read(void *buf, size_t offset, size_t len);
 extern int fs_open(const char *pathname, int flags, int mode);
 extern ssize_t fs_read(int fd, void *buf, size_t count);
@@ -31,6 +35,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     }
   }
   return elf.e_entry;*/
+
   //In PA 3.3
   Elf_Ehdr elf_ehdr;
   Elf_Phdr elf_phdr;
@@ -42,12 +47,33 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     fs_read(fd, (void *)&elf_phdr, sizeof(Elf_Phdr));
     if (elf_phdr.p_type == PT_LOAD) {
       fs_lseek(fd, elf_phdr.p_offset, SEEK_SET);
-      fs_read(fd, (void *)elf_phdr.p_vaddr, elf_phdr.p_filesz);
-      memset((void *)(elf_phdr.p_vaddr + elf_phdr.p_filesz), 0, elf_phdr.p_memsz - elf_phdr.p_filesz);
+      //undef HAS_VME
+      //fs_read(fd, (void *)elf_phdr.p_vaddr, elf_phdr.p_filesz); 
+      
+      //In PA 4.2
+      int32_t left_size = elf_phdr.p_filesz;
+      void *st = (void *)elf_phdr.p_vaddr;
+      while (left_size > 0) {
+        void *page_base = new_page(1);  
+        _map(&pcb->as, st, page_base, 0);
+        uint32_t write_size = min(left_size, PGSIZE);
+        fs_read(fd, page_base, write_size);
+        left_size -= write_size;
+        st += write_size;
+      }
+      //memset((void *)(elf_phdr.p_vaddr + elf_phdr.p_filesz), 0, elf_phdr.p_memsz - elf_phdr.p_filesz);
+      left_size = elf_phdr.p_memsz - elf_phdr.p_filesz;
+      while (left_size > 0) {
+        void *page_base = new_page(1);  
+        _map(&pcb->as, st, page_base, 0);
+        memset(page_base, 0, PGSIZE);
+        left_size -= PGSIZE;
+        st += PGSIZE;
+      }
     }
   }
   fs_close(fd);
-
+  
   return elf_ehdr.e_entry;
 }
 
@@ -66,6 +92,7 @@ void context_kload(PCB *pcb, void *entry) {
 }
 
 void context_uload(PCB *pcb, const char *filename) {
+  _protect(&pcb->as);//In PA 4.2
   uintptr_t entry = loader(pcb, filename);
 
   _Area stack;
